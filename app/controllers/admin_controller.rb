@@ -8,6 +8,8 @@ class AdminController < ApplicationController
     @users = User.all
     @account = Account.new
     @accounts = Account.all
+    @transaction = Transaction.new
+    @transactions = Transaction.all
   end
   
   private

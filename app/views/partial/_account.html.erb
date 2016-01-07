@@ -7,3 +7,4 @@
   <strong>Libelle:</strong>
   <%= account.libelle %>
 </p>
+ <%= render partial:"/partial/last_transactions", collection: account.transactions, as: :transaction %>

@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   include Authentification
+
   before_action :set_user, only: [:show, :edit, :update, :destroy]
   before_action :set_current_user, only: [:show]
   
@@ -13,6 +14,9 @@ class UsersController < ApplicationController
   # GET /users/1.json
   def show
     @accounts = @user.accounts
+    @accounts.each.with_index do |account, i|
+      instance_variable_set("@last_transactions_"+"#{i}",account.transactions.last(3))
+    end
   end
 
   # GET /users/new
