@@ -1,24 +1,8 @@
-<p id="notice"><%= notice %></p>
-
-<p>
-  <strong>Nom:</strong>
-  <%= @user.nom %>
-</p>
-
-<p>
-  <strong>Prenom:</strong>
-  <%= @user.prenom %>
-</p>
-
-<p>
-  <strong>Sexe:</strong>
-  <%= @user.sexe %>
-</p>
-
-<p>
-  <strong>Adresse:</strong>
-  <%= @user.adresse %>
-</p>
-
-<%= link_to 'Edit', edit_user_path(@user) %> |
-<%= link_to 'Back', users_path %>
+<div class="container">
+	<div class="card col-xs-3 dashboard bg-faded">
+		<%= link_to "ajouter compte", new_account_url, class:"btn btn-primary", remote:true %>
+		<% if !@accounts.empty? %>
+			<%= render partial:"/partial/account", collection:@accounts %>
+		<% end %>
+	</div>
+</div>

@@ -1,7 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe AdminController, type: :controller do
-  
+  before(:each) do
+    User.create!(
+        :nom => "foo",
+        :prenom => "Prenom",
+        :sexe => "Sexe",
+        :adresse => "Adresse",
+        :password_digest => "Password Digest"      
+      )
+  end
   describe "GET #show" do
     it "returns http success" do
       @request.session["user_id"] = User.first.id

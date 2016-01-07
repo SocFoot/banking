@@ -7,16 +7,21 @@ RSpec.describe "users/show", type: :view do
       :prenom => "Prenom",
       :sexe => "Sexe",
       :adresse => "Adresse",
-      :password => "3210",
-      :password_confirmation => "3210"
+      :password_digest => "3210"
     ))
+
+    @account = assign(:account, Account.create!(
+      :zip => 1111111111111111,
+      :libelle => "Libelle",
+      :user_id => @user.id
+    ))
+    
+    @accounts = Account.all
+
   end
 
   it "renders attributes in <p>" do
     render
-    expect(rendered).to match(/Nom/)
-    expect(rendered).to match(/Prenom/)
-    expect(rendered).to match(/Sexe/)
-    expect(rendered).to match(/Adresse/)
+
   end
 end

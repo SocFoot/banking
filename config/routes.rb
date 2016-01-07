@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :accounts
   get 'admin/show'
 
   resources :users

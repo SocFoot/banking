@@ -6,6 +6,8 @@ class AdminController < ApplicationController
   def show
     @user = User.new
     @users = User.all
+    @account = Account.new
+    @accounts = Account.all
   end
   
   private

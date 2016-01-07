@@ -1,0 +1,21 @@
+<table>
+  <thead>
+    <tr>
+      <th>Zip</th>
+      <th>Libelle</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody><br />
+    <% @accounts.each do |account| %>
+      <tr>
+        <td><%= account.zip %></td>
+        <td><%= account.libelle %></td>
+        <td><%= link_to 'Show', account %></td>
+        <td><%= link_to 'Edit', edit_account_path(account) %></td>
+        <td><%= link_to 'Destroy', account, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

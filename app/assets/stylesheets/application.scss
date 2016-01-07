@@ -16,6 +16,12 @@
  @import 'bootstrap';
  
 body {
-  padding-top: 50px;  
+  padding-top: 70px;  
 }
 
+.dashboard {
+     position: absolute;
+     top: 55px; /* Header Height */
+     bottom: 0px; /* Footer Height */
+     left:0px;
+}

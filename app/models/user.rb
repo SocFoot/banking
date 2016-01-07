@@ -8,6 +8,8 @@ class User < ActiveRecord::Base
   
   after_destroy :admin_remains
   
+  has_many :accounts
+
   private
   def admin_remains
     if User.count.zero?
