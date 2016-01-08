@@ -1,0 +1,40 @@
+<%= form_for(@epargne) do |f| %>
+  <% if @epargne.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@epargne.errors.count, "error") %> prohibited this epargne from being saved:</h2>
+
+      <ul>
+      <% @epargne.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :style %><br>
+    <%= f.text_field :style %>
+  </div>
+  <div class="field">
+    <%= f.label :libelle %><br>
+    <%= f.text_field :libelle %>
+  </div>
+  <div class="field">
+    <%= f.label :rate %><br>
+    <%= f.text_field :rate %>
+  </div>
+
+  <div class="field">
+    <%= f.label :receive %><br>
+    <%= f.check_box :receive, class:"checkbox" %>
+  </div>
+  
+  <%= f.fields_for :epargne_types do |t| %>
+        <%= t.label :nom %>
+        <%= t.select :nom, @epargne_types_collect %>
+  <% end %>
+  
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

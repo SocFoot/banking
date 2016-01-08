@@ -11,8 +11,17 @@ class AdminController < ApplicationController
     @transaction = Transaction.new
     @transactions = Transaction.all
     @status = [["Nouveau"], ["en cours de traitement"], ["traité"]]
+    
     @litige = Litige.new
     @litiges = Litige.all
+    
+    @epargne = Epargne.new
+    @epargnes = Epargne.all
+    @epargne_types_collect = [[]]
+      
+    @epargne_type = Epargne.new
+    @epargne_types = EpargneType.all
+    @epargne_collect = Epargne.all.collect { |p| [ p.id ] }
   end
   
   private

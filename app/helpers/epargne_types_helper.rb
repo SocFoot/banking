@@ -1,0 +1,2 @@
+module EpargneTypesHelper
+end

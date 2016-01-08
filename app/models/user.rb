@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   after_destroy :admin_remains
   
   has_many :accounts
+  has_many :epargnes
 
   private
   def admin_remains

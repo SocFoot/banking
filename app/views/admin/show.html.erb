@@ -1,11 +1,50 @@
-<%= render "/users/form", locals:@user %><br>
-<%= render "/partial/users_index" %><br>
+<div class="container col-xs-6">
+<ul class="nav nav-tabs" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link active" data-toggle="tab" href="#user" role="tab">User</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#account" role="tab">Account</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#transaction" role="tab">Transaction</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#litige" role="tab">litige</a>
+  </li>
+   <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#epargne" role="tab">Epargne</a>
+  </li>
+   <li class="nav-item">
+    <a class="nav-link" data-toggle="tab" href="#epargne_type" role="tab">Epargne type</a>
+  </li>
+</ul>
 
-<%= render "/accounts/form", locals:@account %><br>
-<%= render "/partial/accounts_index" %><br>
+<div class="tab-content">
+  <div class="tab-pane active" id="user" role="tabpanel">
+  	  	<%= link_to "go", new_user_url, class:"btn btn-primary" %>
+  <h3>	<%= render "/partial/users_index" %></h3>
+  </div>
+  <div class="tab-pane" id="account" role="tabpanel">
+  	<%= link_to "go", new_account_url, class:"btn btn-primary" %>
+  <h3><%= render "/partial/accounts_index" %></h3>	
+  </div>
+  <div class="tab-pane" id="transaction" role="tabpanel">
+  	<%= link_to "go", new_transaction_url, class:"btn btn-primary" %>
+  	<h3><%= render "/partial/transactions_index" %></h3>
+  	</div>
+  <div class="tab-pane" id="litige" role="tabpanel">
+  	<%= link_to "go", new_litige_url, class:"btn btn-primary" %>
+  	<h3><%= render "/partial/litige_index" %></h3>
+  </div>
+  <div class="tab-pane" id="epargne" role="tabpanel">
+  	  	<%= link_to "go", new_epargne_url, class:"btn btn-primary" %>
+  	<h3><%= render "/partial/epargnes_index" %></h3>
+  </div>
+  <div class="tab-pane" id="epargne_type" role="tabpanel">
+  	<%= link_to "go", new_epargne_type_url, class:"btn btn-primary" %>
+  	<h3><%= render "/partial/epargne_types_index"%></h3>
+  </div> 
+</div>
 
-<%= render "/transactions/form", locals:@transaction %><br>
-<%= render "/partial/transactions_index" %><br>
-
-<%= render "/litiges/form", locals:@litiges %><br>
-<%= render "/partial/litige_index" %><br>
+</div>

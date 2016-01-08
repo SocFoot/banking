@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108041032) do
+ActiveRecord::Schema.define(version: 20160108161512) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "zip",        limit: 16
@@ -22,6 +22,27 @@ ActiveRecord::Schema.define(version: 20160108041032) do
   end
 
   add_index "accounts", ["user_id"], name: "index_accounts_on_user_id"
+
+  create_table "epargne_types", force: :cascade do |t|
+    t.string   "nom"
+    t.integer  "epargne_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "epargne_types", ["epargne_id"], name: "index_epargne_types_on_epargne_id"
+
+  create_table "epargnes", force: :cascade do |t|
+    t.string   "style"
+    t.string   "libelle"
+    t.decimal  "rate",       precision: 4, scale: 2
+    t.integer  "user_id"
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.boolean  "receive"
+  end
+
+  add_index "epargnes", ["user_id"], name: "index_epargnes_on_user_id"
 
   create_table "litiges", force: :cascade do |t|
     t.string   "identifiant"

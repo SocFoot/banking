@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nom:</strong>
+  <%= @epargne_type.nom %>
+</p>
+
+<p>
+  <strong>Epargne:</strong>
+  <%= @epargne_type.epargne %>
+</p>
+
+<%= link_to 'Edit', edit_epargne_type_path(@epargne_type) %> |
+<%= link_to 'Back', epargne_types_path %>

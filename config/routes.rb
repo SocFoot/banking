@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :epargne_types
+  resources :epargnes
   resources :litiges
   resources :transactions
   resources :accounts

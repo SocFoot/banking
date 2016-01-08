@@ -40,7 +40,7 @@ RSpec.describe TransactionsController, type: :controller do
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # TransactionsController. Be sure to keep this updated too.
-  let(:valid_session) { { remember_token: "YXjPrFfsK8SFQOQDEa90ow" } }
+  let(:valid_session) { { user_id: User.first.id } }
 
   describe "GET #index" do
     it "assigns all transactions as @transactions" do

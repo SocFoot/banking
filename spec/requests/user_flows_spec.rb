@@ -10,7 +10,7 @@ RSpec.describe "UserFlows", type: :request do
     end
   end
   
-  describe "loggin" do
+  describe "login" do
     fixtures :users  
       
     it "works! " do

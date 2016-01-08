@@ -1,6 +1,9 @@
 <div class="container">
 	<div class="card col-xs-3 dashboard bg-faded">
-		<%= link_to "ajouter compte", new_account_url, class:"btn btn-primary", remote:true %>
+		<div class="btn-group">
+			<%= link_to "ajouter compte", new_account_url, class:"btn btn-primary", remote:true %>
+			<%= link_to "ajouter epargne", new_epargne_url, class:"btn btn-primary", remote:true %>
+		</div>
 		<% if !@accounts.empty? %>
 			<%= render partial:"/partial/account", collection:@accounts %>
 		<% end %>
