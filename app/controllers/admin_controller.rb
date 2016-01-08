@@ -10,6 +10,9 @@ class AdminController < ApplicationController
     @accounts = Account.all
     @transaction = Transaction.new
     @transactions = Transaction.all
+    @status = [["Nouveau"], ["en cours de traitement"], ["traité"]]
+    @litige = Litige.new
+    @litiges = Litige.all
   end
   
   private

@@ -1,0 +1,2 @@
+module LitigesHelper
+end

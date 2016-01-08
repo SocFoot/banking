@@ -1,0 +1,33 @@
+<%= form_for(@litige) do |f| %>
+  <% if @litige.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@litige.errors.count, "error") %> prohibited this litige from being saved:</h2>
+
+      <ul>
+      <% @litige.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :identifiant %><br>
+    <%= f.text_field :identifiant %>
+  </div>
+  <div class="field">
+    <%= f.label :status %><br>
+    <%= f.select :status, @status %>
+  </div>
+  <div class="field">
+    <%= f.label :motif %><br>
+    <%= f.text_field :motif %>
+  </div>
+  <div class="field">
+    <%= f.label :transaction_id %><br>
+    <%= f.select :transaction_id, Transaction.all.collect { |p| [ p.id ] } %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

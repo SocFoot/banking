@@ -31,10 +31,10 @@ RSpec.describe Transaction, type: :model do
   
   describe "bad account" do
     it "second create should not pass" do
-      @account = Account.new(
+      @transaction = Account.new(
         :libelle => "e"    
       )
-      @account.invalid?
+      @transaction.invalid?
     end
   end
 end

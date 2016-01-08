@@ -1,6 +1,10 @@
 class Transaction < ActiveRecord::Base
-  belongs_to :account
+  
   attr_accessor :zip
+  
+  belongs_to :account
+  has_many :litiges
+  
   validate :non_zero
   
   def non_zero
@@ -10,11 +14,11 @@ class Transaction < ActiveRecord::Base
   end
     
   def self.ins(id)
-    @ins = Transaction.where(account_id:id).sum(:in)
+    @ins = Transaction.joins(:litiges).where(account_id:id).where(litiges:{status:"traité"}).sum(:in)
   end
   
   def self.out(id)
-    @out = Transaction.where(account_id:id).sum(:out)
+    @out = Transaction.joins(:litiges).where(account_id:id).where(litiges:{status:"traité"}).sum(:out)
   end
   
 end

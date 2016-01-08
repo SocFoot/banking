@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :litiges
   resources :transactions
   resources :accounts
   get 'admin/show'

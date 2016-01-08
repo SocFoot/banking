@@ -1,0 +1,25 @@
+<table>
+  <thead>
+    <tr>
+      <th>Identifiant</th>
+      <th>Status</th>
+      <th>Motif</th>
+      <th>Transaction</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @litiges.each do |litige| %>
+      <tr>
+        <td><%= litige.identifiant %></td>
+        <td><%= litige.status %></td>
+        <td><%= litige.motif %></td>
+        <td><%= litige.transaction_id %></td>
+        <td><%= link_to 'Show', litige %></td>
+        <td><%= link_to 'Edit', edit_litige_path(litige) %></td>
+        <td><%= link_to 'Destroy', litige, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
