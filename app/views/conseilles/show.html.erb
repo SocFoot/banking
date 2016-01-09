@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Nom:</strong>
+  <%= @conseille.nom %>
+</p>
+
+<p>
+  <strong>Prenom:</strong>
+  <%= @conseille.prenom %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @conseille.user %>
+</p>
+
+<p>
+  <strong>Account:</strong>
+  <%= @conseille.account %>
+</p>
+
+<p>
+  <strong>Transaction:</strong>
+  <%= @conseille.trans %>
+</p>
+
+<p>
+  <strong>Litige:</strong>
+  <%= @conseille.litige %>
+</p>
+
+<%= link_to 'Edit', edit_conseille_path(@conseille) %> |
+<%= link_to 'Back', conseilles_path %>

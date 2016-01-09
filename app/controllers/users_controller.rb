@@ -13,7 +13,14 @@ class UsersController < ApplicationController
   # GET /users/1
   # GET /users/1.json
   def show
+    @admin = admin?
     @accounts = @user.accounts
+    @users = User.all
+    @transactions = Transaction.all
+    @litiges = Litige.all
+    @epargnes = Epargne.all
+    @epargne_types = EpargneType.all
+    @conseilles = Conseille.all
     @accounts.each.with_index do |account, i|
       instance_variable_set("@last_transactions_"+"#{i}",account.transactions.last(3))
     end
@@ -78,4 +85,10 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:nom, :prenom, :sexe, :adresse, :password, :password_confirmation)
     end
+    
+  def admin?
+    if @current_user
+      @current_user.id == User.first.id
+    end
+  end
 end

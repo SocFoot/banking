@@ -1,6 +1,9 @@
 module Authentification
   extend ActiveSupport::Concern
   
+      
+
+  
   private
   
     def set_current_user

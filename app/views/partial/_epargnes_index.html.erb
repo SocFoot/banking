@@ -1,7 +1,6 @@
 <table>
   <thead>
     <tr>
-      <th>Style</th>
       <th>Libelle</th>
       <th>Rate</th>
       <th>User</th>
@@ -12,13 +11,14 @@
   <tbody>
     <% @epargnes.each do |epargne| %>
       <tr>
-        <td><%= epargne.style %></td>
         <td><%= epargne.libelle %></td>
         <td><%= epargne.rate %></td>
-        <td><%= epargne.user %></td>
-        <td><%= link_to 'Show', epargne %></td>
-        <td><%= link_to 'Edit', edit_epargne_path(epargne) %></td>
-        <td><%= link_to 'Destroy', epargne, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= epargne.user.nom %></td>
+        <% if @admin %>
+	        <td><%= link_to 'Show', epargne %></td>
+	        <td><%= link_to 'Edit', edit_epargne_path(epargne) %></td>
+	        <td><%= link_to 'Destroy', epargne, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

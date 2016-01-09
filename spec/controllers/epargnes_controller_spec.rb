@@ -35,11 +35,11 @@ RSpec.describe EpargnesController, type: :controller do
   # Epargne. As you add validations to Epargne, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    {libelle: "blah", style: "whao", rate: 9.8, receive: true, user_id:1}
+    {libelle: "blah", rate: 9.8, receive: true, user_id:1}
   }
 
   let(:invalid_attributes) {
-    {libelle: "badd", style: "bad", rate: nil, user_id:1}
+    {libelle: "badd",  rate: nil, user_id:1}
   }
 
   # This should return the minimal set of values that should be in the session
@@ -114,7 +114,7 @@ RSpec.describe EpargnesController, type: :controller do
   describe "PUT #update" do
     context "with valid params" do
       let(:new_attributes) {
-        {libelle: "blahhh", style: "whao", rate: 9.8, receive: true, user_id:1}
+        {libelle: "blahhh", rate: 9.8, receive: true, user_id:1}
       }
 
       it "updates the requested epargne" do

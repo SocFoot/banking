@@ -15,9 +15,12 @@ RSpec.describe "users/show", type: :view do
       :libelle => "Libelle",
       :user_id => @user.id
     ))
-    
+    @users = User.all
     @accounts = Account.all
-
+    @transactions = Transaction.all
+    @litiges = Litige.all
+    @epargnes = Epargne.all
+    @conseilles = Conseille.all
   end
 
   it "renders attributes in <p>" do

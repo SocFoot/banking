@@ -21,6 +21,13 @@ require 'rails_helper'
 RSpec.describe TransactionsController, type: :controller do
   
     before(:each) do
+    @user = User.create!(
+      :nom => "foo",
+      :prenom => "Prenom",
+      :sexe => "Sexe",
+      :adresse => "Adresse",
+      :password_digest => "Password Digest"      
+    )
     @account = Account.create!(
         :libelle => "toto",
         :zip => 1111111111111111      

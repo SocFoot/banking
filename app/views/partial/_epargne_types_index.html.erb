@@ -11,10 +11,12 @@
     <% @epargne_types.each do |epargne_type| %>
       <tr>
         <td><%= epargne_type.nom %></td>
-        <td><%= epargne_type.epargne %></td>
+        <td><%= epargne_type.epargne.libelle %></td>
+        <% if @admin %>
         <td><%= link_to 'Show', epargne_type %></td>
         <td><%= link_to 'Edit', edit_epargne_type_path(epargne_type) %></td>
         <td><%= link_to 'Destroy', epargne_type, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
       </tr>
     <% end %>
   </tbody>

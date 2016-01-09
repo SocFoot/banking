@@ -1,0 +1,27 @@
+<table>
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Prenom</th>
+      <th>User</th>
+      <th>Account</th>
+      <th>Transaction</th>
+      <th>Litige</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @conseilles.each do |conseille| %>
+      <tr>
+        <td><%= conseille.nom %></td>
+        <td><%= conseille.prenom %></td>
+        <% if @admin %>
+	        <td><%= link_to 'Show', conseille %></td>
+	        <td><%= link_to 'Edit', edit_conseille_path(conseille) %></td>
+	        <td><%= link_to 'Destroy', conseille, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

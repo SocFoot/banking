@@ -19,6 +19,17 @@ require 'rails_helper'
 # that an instance is receiving a specific message.
 
 RSpec.describe UsersController, type: :controller do
+  
+      before(:each) do
+        @user = User.create!(
+          :nom => "foo",
+          :prenom => "Prenom",
+          :sexe => "Sexe",
+          :adresse => "Adresse",
+          :password_digest => "Password Digest"      
+        )
+        @current_user = User.first
+    end
 
   # This should return the minimal set of attributes required to create a valid
   # User. As you add validations to User, be sure to

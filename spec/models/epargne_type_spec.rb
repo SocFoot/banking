@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe EpargneType, type: :model do
-    describe "Epargne attributes" do
+  describe "Epargne attributes" do
     it "should include the :nom attribute" do
       expect(EpargneType.new.attributes).to include("nom")
     end
@@ -21,7 +21,7 @@ RSpec.describe EpargneType, type: :model do
   end
   
   
-  describe "bad account" do    
+  describe "bad epargne_type" do    
     
     it "same nom don't pass" do
       EpargneType.create!(

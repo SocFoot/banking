@@ -1,0 +1,41 @@
+<%= form_for(@conseille) do |f| %>
+  <% if @conseille.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@conseille.errors.count, "error") %> prohibited this conseille from being saved:</h2>
+
+      <ul>
+      <% @conseille.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :nom %><br>
+    <%= f.text_field :nom %>
+  </div>
+  <div class="field">
+    <%= f.label :prenom %><br>
+    <%= f.text_field :prenom %>
+  </div>
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.select :user_id, @user_ids %>
+  </div>
+  <div class="field">
+    <%= f.label :account_id %><br>
+    <%= f.select :account_id, @account_ids %>
+  </div>
+  <div class="field">
+    <%= f.label :transaction_id %><br>
+    <%= f.select :transaction_id, @transaction_ids %>
+  </div>
+  <div class="field">
+    <%= f.label :litige_id %><br>
+    <%= f.select :litige_id, @litige_ids %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

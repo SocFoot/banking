@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108161512) do
+ActiveRecord::Schema.define(version: 20160109035906) do
 
   create_table "accounts", force: :cascade do |t|
     t.integer  "zip",        limit: 16
@@ -23,6 +23,22 @@ ActiveRecord::Schema.define(version: 20160108161512) do
 
   add_index "accounts", ["user_id"], name: "index_accounts_on_user_id"
 
+  create_table "conseilles", force: :cascade do |t|
+    t.string   "nom"
+    t.string   "prenom"
+    t.integer  "user_id"
+    t.integer  "account_id"
+    t.integer  "transaction_id"
+    t.integer  "litige_id"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+  end
+
+  add_index "conseilles", ["account_id"], name: "index_conseilles_on_account_id"
+  add_index "conseilles", ["litige_id"], name: "index_conseilles_on_litige_id"
+  add_index "conseilles", ["transaction_id"], name: "index_conseilles_on_transaction_id"
+  add_index "conseilles", ["user_id"], name: "index_conseilles_on_user_id"
+
   create_table "epargne_types", force: :cascade do |t|
     t.string   "nom"
     t.integer  "epargne_id"
@@ -33,7 +49,6 @@ ActiveRecord::Schema.define(version: 20160108161512) do
   add_index "epargne_types", ["epargne_id"], name: "index_epargne_types_on_epargne_id"
 
   create_table "epargnes", force: :cascade do |t|
-    t.string   "style"
     t.string   "libelle"
     t.decimal  "rate",       precision: 4, scale: 2
     t.integer  "user_id"

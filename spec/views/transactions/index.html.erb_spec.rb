@@ -7,13 +7,13 @@ RSpec.describe "transactions/index", type: :view do
         :in => 1,
         :out => 2,
         :libelle => "Libelle",
-        :account => nil
+        :account => Account.create
       ),
       Transaction.create!(
         :in => 1,
         :out => 2,
         :libelle => "Libelle",
-        :account => nil
+        :account => Account.create
       )
     ])
   end

@@ -16,9 +16,11 @@
         <td><%= litige.status %></td>
         <td><%= litige.motif %></td>
         <td><%= litige.transaction_id %></td>
-        <td><%= link_to 'Show', litige %></td>
-        <td><%= link_to 'Edit', edit_litige_path(litige) %></td>
-        <td><%= link_to 'Destroy', litige, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <% if @admin %>
+	        <td><%= link_to 'Show', litige %></td>
+	        <td><%= link_to 'Edit', edit_litige_path(litige) %></td>
+	        <td><%= link_to 'Destroy', litige, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+	    <% end %>
       </tr>
     <% end %>
   </tbody>

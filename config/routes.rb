@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  resources :conseilles
+  resources :conseilles
   resources :epargne_types
   resources :epargnes
   resources :litiges
