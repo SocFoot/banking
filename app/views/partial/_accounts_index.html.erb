@@ -1,3 +1,7 @@
+	<div class="btn btn-primary" ng-click="myaccounts()">
+		json index
+	</div>
+
 <table>
   <thead>
     <tr>
@@ -19,5 +23,21 @@
 	    <% end %>    
       </tr>
     <% end %>
+  </tbody>
+</table>
+
+<table  class="table table-striped" ng-show="data.accounts_empty">
+  <thead>
+    <tr>
+      <th>Zip</th>
+      <th>Libelle</th>
+    </tr>
+  </thead>
+
+  <tbody><br />
+      <tr ng-repeat="account in data.accounts">
+        <td>{{account.zip}}</td>
+        <td>{{account.libelle}}</td>   
+      </tr>
   </tbody>
 </table>

@@ -1,11 +1,18 @@
 class ConseillesController < ApplicationController
-  before_action :admin_only
+  include Authentification, Admin
+  skip_before_action :admin_only
+  before_action :admin_only, except:[:edit, :update]
+  before_action :admin?, only:[:edit, :update]
   before_action :set_conseille, only: [:show, :edit, :update, :destroy]
 
   # GET /conseilles
   # GET /conseilles.json
   def index
     @conseilles = Conseille.all
+    respond_to do |format|
+      format.html
+      format.json { render json: @conseilles}
+    end
   end
 
   # GET /conseilles/1
@@ -17,7 +24,11 @@ class ConseillesController < ApplicationController
   def new
     @conseille = Conseille.new
     @user_ids = User.all.collect { |p| [ p.id ] }  
-    @account_ids = Account.all.collect { |p| [ p.id ] }
+    if admin?
+      @account_ids = Account.all.collect { |p| [ p.id ] }
+    else
+      @account_ids = Account.tri(@current_user.id).all.collect { |p| [ p.id ] }
+    end
     @transaction_ids = Transaction.all.collect { |p| [ p.id ] }
     @litige_ids = Litige.all.collect { |p| [ p.id ] }
   end
@@ -48,8 +59,12 @@ class ConseillesController < ApplicationController
   # PATCH/PUT /conseilles/1
   # PATCH/PUT /conseilles/1.json
   def update
+    @conseille_params = conseille_params
+    if !@admin
+      @conseille_params = conseille_params_user
+    end
     respond_to do |format|
-      if @conseille.update(conseille_params)
+      if @conseille.update(@conseille_params)
         format.html { redirect_to @conseille, notice: 'Conseille was successfully updated.' }
         format.json { render :show, status: :ok, location: @conseille }
       else
@@ -79,11 +94,10 @@ class ConseillesController < ApplicationController
     def conseille_params
       params.require(:conseille).permit(:nom, :prenom, :user_id, :account_id, :transaction_id, :litige_id)
     end
+
     
-        # ONLY ME I AND MYSELF!!!!
-    def admin_only
-      unless User.first.id == session[:user_id]
-        redirect_to root_url, notice: "STOP HERE !!!"
-      end
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def conseille_params_user
+      params.require(:conseille).permit(:account_id, :epargne_id)
     end
 end

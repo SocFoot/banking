@@ -6,4 +6,5 @@ class Conseille < ActiveRecord::Base
   belongs_to :account
   belongs_to :trans , foreign_key: "transaction_id", class_name: "Transaction"
   belongs_to :litige
+
 end

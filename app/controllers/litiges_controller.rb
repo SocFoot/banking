@@ -1,10 +1,19 @@
 class LitigesController < ApplicationController
+  include Admin, Authentification
+  skip_before_action :admin_only
+  before_action :admin_only, except:[:edit, :update]
+  before_action :admin?, only:[:edit, :update]
   before_action :set_litige, only: [:show, :edit, :update, :destroy]
 
   # GET /litiges
   # GET /litiges.json
   def index
-    @litiges = Litige.all
+    if admin?
+      @litiges = Litige.all
+    else
+      @litiges = Litige.tri(@current_user).all
+    end
+    
   end
 
   # GET /litiges/1
@@ -16,11 +25,13 @@ class LitigesController < ApplicationController
   def new
     @litige = Litige.new
     @status = [["Nouveau"], ["en cours de traitement"], ["traité"]]
+    @transaction_ids = [[]]
   end
 
   # GET /litiges/1/edit
   def edit
     @status = [["Nouveau"], ["en cours de traitement"], ["traité"]]
+    @transaction_ids = Transaction.all.collect { |p| [ p.id ] }
   end
 
   # POST /litiges
@@ -42,8 +53,12 @@ class LitigesController < ApplicationController
   # PATCH/PUT /litiges/1
   # PATCH/PUT /litiges/1.json
   def update
+    @litige_params = litige_params
+    if !@admin
+      @litige_params = litige_params_user
+    end
     respond_to do |format|
-      if @litige.update(litige_params)
+      if @litige.update(@litige_params)
         format.html { redirect_to @litige, notice: 'Litige was successfully updated.' }
         format.json { render :show, status: :ok, location: @litige }
       else
@@ -72,5 +87,10 @@ class LitigesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def litige_params
       params.require(:litige).permit(:identifiant, :status, :motif, :transaction_id)
+    end
+    
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def conseille_params_user
+      params.require(:litige).permit(:transaction_id)
     end
 end

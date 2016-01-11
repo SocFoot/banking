@@ -4,7 +4,7 @@ RSpec.describe "Accounts", type: :request do
   describe "GET /accounts" do
     it "works! (now write some real specs)" do
       get accounts_path
-      expect(response).to have_http_status(200)
+      expect(response).to redirect_to root_url
     end
   end
 end

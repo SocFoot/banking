@@ -1,11 +1,20 @@
 class TransactionsController < ApplicationController
-  before_action :admin_only
+  include Admin, Authentification
+  before_action :logged?, only: [:index]
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
 
   # GET /transactions
   # GET /transactions.json
   def index
-    @transactions = Transaction.all
+    if admin?
+      @transactions = Transaction.all
+    else
+      @transaction = Transaction.tri(@current_user.id).all
+    end
+    respond_to do |format|
+      format.html
+      format.json { render json: @transactions}
+    end
   end
 
   # GET /transactions/1
@@ -16,10 +25,12 @@ class TransactionsController < ApplicationController
   # GET /transactions/new
   def new
     @transaction = Transaction.new
+    @account_ids = [[]]
   end
 
   # GET /transactions/1/edit
   def edit
+    @account_ids = Account.all.collect { |p| [ p.id ] }
   end
 
   # POST /transactions
@@ -82,10 +93,9 @@ class TransactionsController < ApplicationController
       params.require(:transaction).permit(:zip)
     end
     
-    # ONLY ME I AND MYSELF!!!!
-    def admin_only
-      unless User.first.id == session[:user_id]
-        redirect_to root_url, notice: "STOP HERE !!!"
-      end
+      def logged?
+    if session[:user_id].nil?
+      redirect_to root_url, notice:"connect toi mec!"
     end
+  end
 end

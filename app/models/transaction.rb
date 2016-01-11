@@ -7,6 +7,8 @@ class Transaction < ActiveRecord::Base
   
   validate :non_zero
   
+  scope :tri, -> (user_id){joins(account: :user).order("zip").where('users.id' => user_id)}
+  
   def non_zero
     if (self.in == 0 || self.in.nil?) && (self.out == 0 || self.out.nil?)
       errors.add( :in,  "can't blank with out")

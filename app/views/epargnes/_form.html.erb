@@ -29,7 +29,12 @@
         <%= t.label :nom %>
         <%= t.select :nom, @epargne_types_collect %>
   <% end %>
-  
+  <% if @admin %>
+	    <div class="field">
+	    <%= f.label :user_id %><br>
+	    <%= f.select :user_id, @user_ids %>
+	  </div>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

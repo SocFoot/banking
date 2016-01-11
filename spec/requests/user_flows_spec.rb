@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe "UserFlows", type: :request do
   describe "new user" do
     it "works! " do
-      get new_user_url
-      expect(response).to have_http_status(200)
+      get new_user_url, {}
+      expect(response).to redirect_to root_url
       post_via_redirect users_url , user:{name:"foo", prenom:"bar", adresse:"7 rue", sexe:"femme", password: '3210'}
       assert_response :success
     end

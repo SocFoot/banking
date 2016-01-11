@@ -1,4 +1,5 @@
 class Epargne < ActiveRecord::Base
+  extend Tri
   validates :user_id, presence: true
   validates :rate, presence: true
   
@@ -6,4 +7,6 @@ class Epargne < ActiveRecord::Base
   has_many :epargne_types
   
   accepts_nested_attributes_for :epargne_types
+  
+  
 end

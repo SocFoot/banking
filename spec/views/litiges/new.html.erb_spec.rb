@@ -22,7 +22,7 @@ RSpec.describe "litiges/new", type: :view do
 
       assert_select "input#litige_motif[name=?]", "litige[motif]"
 
-      assert_select "select#litige_transaction_id[name=?]", "litige[transaction_id]"
+
     end
   end
 end

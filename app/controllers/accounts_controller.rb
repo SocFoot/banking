@@ -1,13 +1,24 @@
 class AccountsController < ApplicationController
-  include Authentification
-
+  include Authentification, Admin
+  skip_before_action :admin_only
+  before_action :admin_only, only: [:destroy]
+  before_action :logged?, only: [:index, :create]
   before_action :set_current_user, only: [:create]
   before_action :set_account, only: [:show, :edit, :update, :destroy]
 
   # GET /accounts
   # GET /accounts.json
   def index
-    @accounts = Account.all
+    if admin?
+      @accounts = Account.all
+    else
+      @accounts = Account.tri.all
+    end
+    
+    respond_to do |format|
+      format.html
+      format.json { render json: @accounts}
+    end
   end
 
   # GET /accounts/1
@@ -79,4 +90,9 @@ class AccountsController < ApplicationController
       params.require(:account).permit(:zip, :libelle)
     end
     
+      def logged?
+    if session[:user_id].nil?
+      redirect_to root_url, notice:"connect toi mec!"
+    end
+  end
 end

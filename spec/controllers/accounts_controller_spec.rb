@@ -50,7 +50,7 @@ RSpec.describe AccountsController, type: :controller do
     it "assigns all accounts as @accounts" do
       account = Account.create! valid_attributes
       get :index, {}, valid_session
-      expect(assigns(:accounts)).to eq([account])
+      expect(assigns(:accounts)).to eq(Account.tri)
     end
   end
 
@@ -155,6 +155,7 @@ RSpec.describe AccountsController, type: :controller do
 
   describe "DELETE #destroy" do
     it "destroys the requested account" do
+      valid_session = {user_id: User.first.id}
       account = Account.create! valid_attributes
       expect {
         delete :destroy, {:id => account.to_param}, valid_session
@@ -162,6 +163,7 @@ RSpec.describe AccountsController, type: :controller do
     end
 
     it "redirects to the accounts list" do
+      valid_session = {user_id: User.first.id}
       account = Account.create! valid_attributes
       delete :destroy, {:id => account.to_param}, valid_session
       expect(response).to redirect_to(accounts_url)

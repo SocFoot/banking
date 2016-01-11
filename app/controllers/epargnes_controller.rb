@@ -1,13 +1,22 @@
 class EpargnesController < ApplicationController
-  include Authentification
-
-  before_action :set_current_user, only: [:create]
+  include Authentification, Admin
+  skip_before_action :admin_only
+  before_action :admin_only, only: [:destroy]
+  before_action :logged?, only: [:index, :create]
   before_action :set_epargne, only: [:show, :edit, :update, :destroy]
 
   # GET /epargnes
   # GET /epargnes.json
   def index
+    if admin?
     @epargnes = Epargne.all
+    else
+    @epargnes = Epargne.tri(@current_user.id).all
+    end
+    respond_to do |format|
+      format.html
+      format.json { render json: @epargnes}
+    end
   end
 
   # GET /epargnes/1
@@ -19,6 +28,7 @@ class EpargnesController < ApplicationController
   def new
     @epargne = Epargne.new
     @epargne_types_collect = [[]]
+    @user_collect = 
     respond_to do |format|
         format.html
         format.js 
@@ -80,4 +90,10 @@ class EpargnesController < ApplicationController
     def epargne_params
       params.require(:epargne).permit(:style, :libelle, :rate, :receive, epargne_types_attributes: [:nom])
     end
+    
+      def logged?
+    if session[:user_id].nil?
+      redirect_to root_url, notice:"connect toi mec!"
+    end
+  end
 end

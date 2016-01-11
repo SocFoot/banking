@@ -2,18 +2,24 @@ class UsersController < ApplicationController
   include Authentification
 
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action :set_current_user, only: [:show]
+  before_action :logged?, except: [:index]
   
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
+    @users = User.all    
+    respond_to do |format|
+      format.html
+      format.json { render json: @users}
+    end
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
-    @admin = admin?
+    if !admin?
+      @user = @current_user
+    end
     @accounts = @user.accounts
     @users = User.all
     @transactions = Transaction.all
@@ -29,10 +35,16 @@ class UsersController < ApplicationController
   # GET /users/new
   def new
     @user = User.new
+    if session[:user_id] && !admin?
+      redirect_to root_path, notice:"T'as déjà un compte mec!"
+    end
   end
 
   # GET /users/1/edit
   def edit
+    if !admin?
+      @user = @current_user
+    end
   end
 
   # POST /users
@@ -85,10 +97,12 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:nom, :prenom, :sexe, :adresse, :password, :password_confirmation)
     end
-    
-  def admin?
-    if @current_user
-      @current_user.id == User.first.id
+
+  
+  def logged?
+    if session[:user_id].nil?
+      redirect_to root_url, notice:"connect toi mec!"
     end
   end
+
 end

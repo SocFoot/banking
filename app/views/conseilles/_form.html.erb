@@ -11,6 +11,8 @@
     </div>
   <% end %>
 
+  
+  <% if @admin %>
   <div class="field">
     <%= f.label :nom %><br>
     <%= f.text_field :nom %>
@@ -19,14 +21,7 @@
     <%= f.label :prenom %><br>
     <%= f.text_field :prenom %>
   </div>
-  <div class="field">
-    <%= f.label :user_id %><br>
-    <%= f.select :user_id, @user_ids %>
-  </div>
-  <div class="field">
-    <%= f.label :account_id %><br>
-    <%= f.select :account_id, @account_ids %>
-  </div>
+
   <div class="field">
     <%= f.label :transaction_id %><br>
     <%= f.select :transaction_id, @transaction_ids %>
@@ -34,6 +29,16 @@
   <div class="field">
     <%= f.label :litige_id %><br>
     <%= f.select :litige_id, @litige_ids %>
+  </div>
+  <% end %>
+    <div class="field">
+    <%= f.label :account_id %><br>
+    <%= f.select :account_id, @account_ids %>
+  </div>
+  
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= f.select :user_id, @user_ids %>
   </div>
   <div class="actions">
     <%= f.submit %>

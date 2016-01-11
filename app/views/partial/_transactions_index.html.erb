@@ -1,3 +1,8 @@
+
+<div class="btn btn-primary" ng-click="mytransactions()">
+	json index
+</div>
+
 <table>
   <thead>
     <tr>
@@ -23,5 +28,21 @@
         <% end %>
       </tr>
     <% end %>
+  </tbody>
+</table>
+
+<table  class="table table-striped" ng-show="data.transactions_empty">
+  <thead>
+    <tr>
+      <th>In</th>
+      <th>Out</th>
+    </tr>
+  </thead>
+
+  <tbody><br />
+      <tr ng-repeat="transaction in data.transactions">
+        <td>{{transaction.in}}</td>
+        <td>{{transaction.out}}</td>   
+      </tr>
   </tbody>
 </table>

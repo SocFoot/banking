@@ -30,14 +30,15 @@ RSpec.describe TransactionsController, type: :controller do
     )
     @account = Account.create!(
         :libelle => "toto",
-        :zip => 1111111111111111      
+        :zip => 1111111111111111,
+        :user_id => @user.id      
       )
     end
   # This should return the minimal set of attributes required to create a valid
   # Transaction. As you add validations to Transaction, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    { libelle: "er",  out: 78, zip: @account.zip}
+    { libelle: "er",  out: 78, zip: @account.zip, account_id:@account.id}
   }
 
   let(:invalid_attributes) {
@@ -53,7 +54,7 @@ RSpec.describe TransactionsController, type: :controller do
     it "assigns all transactions as @transactions" do
       transaction = Transaction.create! valid_attributes
       get :index, {}, valid_session
-      expect(assigns(:transactions)).to eq([transaction])
+      expect(assigns(:transactions)).to eq(Transaction.all)
     end
   end
 

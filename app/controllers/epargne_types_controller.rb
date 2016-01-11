@@ -1,5 +1,5 @@
 class EpargneTypesController < ApplicationController
-  before_action :admin_only
+  include Admin
   before_action :set_epargne_type, only: [:show, :edit, :update, :destroy]
 
   # GET /epargne_types
@@ -74,10 +74,5 @@ class EpargneTypesController < ApplicationController
       params.require(:epargne_type).permit(:nom, :epargne_id)
     end
     
-    #ONLY ME ME ME
-    def admin_only
-        unless User.first.id == session[:user_id]
-          redirect_to root_url, notice: "STOP HERE !!!"
-      end
-    end
+    
 end

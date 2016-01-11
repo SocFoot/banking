@@ -28,7 +28,7 @@ RSpec.describe UsersController, type: :controller do
           :adresse => "Adresse",
           :password_digest => "Password Digest"      
         )
-        @current_user = User.first
+        @current_user = @user
     end
 
   # This should return the minimal set of attributes required to create a valid
@@ -45,7 +45,8 @@ RSpec.describe UsersController, type: :controller do
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # UsersController. Be sure to keep this updated too.
-  let(:valid_session) { {} }
+  let(:valid_session) { {user_id: @user.id} }
+
 
   describe "GET #index" do
     it "assigns all users as @users" do
@@ -58,6 +59,14 @@ RSpec.describe UsersController, type: :controller do
   describe "GET #show" do
     it "assigns the requested user as @user" do
       user = User.create! valid_attributes
+      valid_session = {user_id:user.to_param}
+      get :show, {:id => user.to_param}, valid_session
+      expect(assigns(:user)).to eq(user)
+    end
+    
+   it "i'm admin show me user secret account!" do
+      user = User.create! valid_attributes     
+      valid_session = {user_id:User.first.id}
       get :show, {:id => user.to_param}, valid_session
       expect(assigns(:user)).to eq(user)
     end
@@ -68,12 +77,31 @@ RSpec.describe UsersController, type: :controller do
       get :new, {}, valid_session
       expect(assigns(:user)).to be_a_new(User)
     end
+    
+    it "already connected but still create fake users..." do
+      user = User.create! valid_attributes
+      get :new, {}, {user_id:user.id}
+      expect(response).to redirect_to(root_url)
+    end
+    
+    it "let me in, i'm admin and i want to create fake users..." do
+      get :new, {}, {user_id:User.first.id}
+      expect(assigns(:user)).to be_a_new(User)
+    end
   end
 
   describe "GET #edit" do
     it "assigns the requested user as @user" do
       user = User.create! valid_attributes
+      valid_session = {user_id:user.to_param}
       get :edit, {:id => user.to_param}, valid_session
+      expect(assigns(:user)).to eq(user)
+    end
+    
+    it "i'm admin edit me user secret account!" do
+      user = User.create! valid_attributes     
+      valid_session = {user_id:User.first.id}
+      get :show, {:id => user.to_param}, valid_session
       expect(assigns(:user)).to eq(user)
     end
   end

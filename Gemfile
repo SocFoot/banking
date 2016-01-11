@@ -33,6 +33,7 @@ end
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+gem 'angularjs-rails', '~> 1.4', '>= 1.4.8'
 # Use Unicorn as the app server
 # gem 'unicorn'
 

@@ -21,7 +21,7 @@ RSpec.describe "transactions/new", type: :view do
 
       assert_select "input#transaction_libelle[name=?]", "transaction[libelle]"
 
-      assert_select "select#transaction_zip[name=?]", "transaction[zip]"
+
     end
   end
 end

@@ -19,6 +19,12 @@
     <%= f.label :libelle %><br>
     <%= f.text_field :libelle %>
   </div>
+    <% if @admin %>
+	    <div class="field">
+	    <%= f.label :user_id %><br>
+	    <%= f.select :user_id, @user_ids %>
+	  </div>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

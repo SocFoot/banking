@@ -51,7 +51,7 @@ RSpec.describe EpargnesController, type: :controller do
     it "assigns all epargnes as @epargnes" do
       epargne = Epargne.create! valid_attributes
       get :index, {}, valid_session
-      expect(assigns(:epargnes)).to eq([epargne])
+      expect(assigns(:epargnes)).to eq(Epargne.tri(@user.id))
     end
   end
 
@@ -154,6 +154,7 @@ RSpec.describe EpargnesController, type: :controller do
 
   describe "DELETE #destroy" do
     it "destroys the requested epargne" do
+      valid_session = {user_id: User.first.id} 
       epargne = Epargne.create! valid_attributes
       expect {
         delete :destroy, {:id => epargne.to_param}, valid_session
@@ -161,6 +162,7 @@ RSpec.describe EpargnesController, type: :controller do
     end
 
     it "redirects to the epargnes list" do
+      valid_session = {user_id: User.first.id}
       epargne = Epargne.create! valid_attributes
       delete :destroy, {:id => epargne.to_param}, valid_session
       expect(response).to redirect_to(epargnes_url)

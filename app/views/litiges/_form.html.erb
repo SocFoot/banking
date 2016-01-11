@@ -23,10 +23,12 @@
     <%= f.label :motif %><br>
     <%= f.text_field :motif %>
   </div>
-  <div class="field">
-    <%= f.label :transaction_id %><br>
-    <%= f.select :transaction_id, Transaction.all.collect { |p| [ p.id ] } %>
-  </div>
+  <% if @admin %>
+	  <div class="field">
+	    <%= f.label :transaction_id %><br>
+	    <%= f.select :transaction_id, @transaction_ids %>
+	  </div>
+  <% end %>
   <div class="actions">
     <%= f.submit %>
   </div>

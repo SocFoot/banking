@@ -21,17 +21,14 @@ RSpec.describe "conseilles/new", type: :view do
 
     assert_select "form[action=?][method=?]", conseilles_path, "post" do
 
-      assert_select "input#conseille_nom[name=?]", "conseille[nom]"
+  
 
-      assert_select "input#conseille_prenom[name=?]", "conseille[prenom]"
+
 
       assert_select "select#conseille_user_id[name=?]", "conseille[user_id]"
 
       assert_select "select#conseille_account_id[name=?]", "conseille[account_id]"
 
-      assert_select "select#conseille_transaction_id[name=?]", "conseille[transaction_id]"
-
-      assert_select "select#conseille_litige_id[name=?]", "conseille[litige_id]"
     end
   end
 end
