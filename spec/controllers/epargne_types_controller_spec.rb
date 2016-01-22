@@ -26,7 +26,8 @@ RSpec.describe EpargneTypesController, type: :controller do
         :prenom => "Prenom",
         :sexe => "Sexe",
         :adresse => "Adresse",
-        :password_digest => "Password Digest"      
+        :email => "oo@gmail.com",
+        :password => "Password Digest"      
     )
   end
   

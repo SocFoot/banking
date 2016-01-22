@@ -1,5 +1,5 @@
 class AdminController < ApplicationController
-  include Authentification, Admin
+  include Authentification, Ad
   before_action :set_current_user, only: [:show]
   
   def show

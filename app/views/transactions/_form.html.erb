@@ -24,14 +24,10 @@
     <%= f.text_field :libelle %>
   </div>
   <% if @admin %>
-    <div class="field">
-    <%= f.label :zip %><br>
-    <%= f.select :zip, Account.all.collect { |p| [ p.zip ] } %>
-  </div>
-    
+  
 	    <div class="field">
-	    <%= f.label :account_id %><br>
-	    <%= f.select :account_id, @account_ids %>
+		    <%= f.label :account_id %><br>
+		    <%= f.select :account_id, @account_ids %>
 	  </div>
   <% end %>
   <div class="actions">

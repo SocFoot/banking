@@ -1,9 +1,8 @@
 class ConseillesController < ApplicationController
-  include Authentification, Admin
-  skip_before_action :admin_only
-  before_action :admin_only, except:[:edit, :update]
-  before_action :admin?, only:[:edit, :update]
-  before_action :set_conseille, only: [:show, :edit, :update, :destroy]
+  include Authentification, Ad
+  skip_before_action :admin_only, except:[:new, :create, :show]
+  before_action :set_conseille, only:[:show, :edit, :update, :destroy]
+  before_action :logged?
 
   # GET /conseilles
   # GET /conseilles.json
@@ -24,7 +23,7 @@ class ConseillesController < ApplicationController
   def new
     @conseille = Conseille.new
     @user_ids = User.all.collect { |p| [ p.id ] }  
-    if admin?
+    if admin_signed_in?
       @account_ids = Account.all.collect { |p| [ p.id ] }
     else
       @account_ids = Account.tri(@current_user.id).all.collect { |p| [ p.id ] }
@@ -60,7 +59,7 @@ class ConseillesController < ApplicationController
   # PATCH/PUT /conseilles/1.json
   def update
     @conseille_params = conseille_params
-    if !@admin
+    if !admin_signed_in?
       @conseille_params = conseille_params_user
     end
     respond_to do |format|
@@ -98,6 +97,14 @@ class ConseillesController < ApplicationController
     
     # Never trust parameters from the scary internet, only allow the white list through.
     def conseille_params_user
-      params.require(:conseille).permit(:account_id, :epargne_id)
+      params.require(:conseille).permit(:account_id, :epargne_id, :user_id)
+    end
+    
+    
+    #if you're not logged you're out!!
+    def logged?
+      if !(user_signed_in? || admin_signed_in?)
+        redirect_to new_user_session_url, notice:"connect toi mec!"
+      end
     end
 end

@@ -5,7 +5,7 @@ RSpec.describe "conseilles/show", type: :view do
     @conseille = assign(:conseille, Conseille.create!(
       :nom => "Nom",
       :prenom => "Prenom",
-      :user_id => nil,
+      :user_id => 1,
       :account_id => nil,
       :trans => nil,
       :litige_id => nil

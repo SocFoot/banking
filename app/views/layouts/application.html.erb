@@ -74,20 +74,22 @@ bank.controller("userController", function($http, $scope) {
 <body ng-app="bank">
 	
 	<nav class="navbar navbar-fixed-top  navbar-light bg-faded" role="navigation">	
-		<% if @current_user.nil? %>
-			<%= form_tag("/login", {class:"form-inline pull-xs-right", role:"login"}) do %>
-				<%= text_field_tag :nom, params[:nom], class:'form-control', placeholder:"nom" %>	
-				<%= text_field_tag :prenom, params[:prenom], class:'form-control', placeholder:"prenom" %>
-				<%= password_field_tag :password, params[:password], class:'form-control', placeholder:"Password"  %>
+		<% if !user_signed_in? %>
+			<%= link_to 'Sign Up', new_user_registration_path, class:"btn btn-primary  pull-xs-right" %>
+			<%= form_tag(user_session_url, {class:"form-inline pull-xs-right", role:"login"}) do |f| %>
+				<%= text_field_tag "user[email]", "user_email", value:nil, class:'form-control', placeholder:"email" %>	
+				<%= password_field_tag "user[password]", "user_email", value: nil,class:'form-control',  placeholder:"Password"  %>
 				
 				<%= submit_tag "Login", class:"btn btn-success" %>
 			<% end %>
 		<% else %>
-			<%= button_to 'logout', logout_path, class:"btn btn-success pull-xs-right", method: :delete %>	
+			<%= button_to 'logout', destroy_user_session_path, class:"btn btn-success pull-xs-right", method: :delete %>	
 		<% end%>
 	</nav>
 	
 	<div class="container"  ng-controller="userController">
+
+
 		<%= yield %>
 	</div>
 </body>

@@ -1,20 +1,21 @@
 class AccountsController < ApplicationController
-  include Authentification, Admin
-  skip_before_action :admin_only
-  before_action :admin_only, only: [:destroy]
-  before_action :logged?, only: [:index, :create]
-  before_action :set_current_user, only: [:create]
+  include Authentification, Ad
+  skip_before_action :admin_only, except: [:destroy]
+  before_action :set_current_user, only: [:index, :create, :edit, :update, :new]
+  before_action :logged?, only: [:index, :create, :edit, :update, :show, :new]
   before_action :set_account, only: [:show, :edit, :update, :destroy]
-
+  before_action only:[:update] do 
+    owner(@account, @current_user.id)if !admin_signed_in?
+  end
   # GET /accounts
   # GET /accounts.json
   def index
-    if admin?
+    if admin_signed_in?
       @accounts = Account.all
     else
-      @accounts = Account.tri.all
+      @accounts = Account.tri(@current_user.id).all
     end
-    
+
     respond_to do |format|
       format.html
       format.json { render json: @accounts}
@@ -24,6 +25,7 @@ class AccountsController < ApplicationController
   # GET /accounts/1
   # GET /accounts/1.json
   def show
+    owner(@account, @current_user.id) if !admin_signed_in?
   end
 
   # GET /accounts/new
@@ -37,13 +39,14 @@ class AccountsController < ApplicationController
 
   # GET /accounts/1/edit
   def edit
+    owner(@account, @current_user.id) if !admin_signed_in?
   end
 
   # POST /accounts
   # POST /accounts.json
   def create
     @account = Account.new(account_params)
-    @account.user_id = @current_user.id
+    @account.user_id = @current_user.id if @current_user
     respond_to do |format|
       if @account.save
         format.html { redirect_to @account, notice: 'Account was successfully created.' }
@@ -57,9 +60,14 @@ class AccountsController < ApplicationController
 
   # PATCH/PUT /accounts/1
   # PATCH/PUT /accounts/1.json
-  def update
+  def update      
+    
+    @account_params = light_account_params
+    if admin_signed_in?
+      @account_params = account_params
+    end
     respond_to do |format|
-      if @account.update(account_params)
+      if @account.update(@account_params)
         format.html { redirect_to @account, notice: 'Account was successfully updated.' }
         format.json { render :show, status: :ok, location: @account }
       else
@@ -85,14 +93,28 @@ class AccountsController < ApplicationController
       @account = Account.find(params[:id])
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
+    #(ADMIN ONLY) Never trust parameters from the scary internet, only allow the white list through.
     def account_params
-      params.require(:account).permit(:zip, :libelle)
+      params.require(:account).permit(:zip, :libelle, :user_id)
+
     end
     
-      def logged?
-    if session[:user_id].nil?
-      redirect_to root_url, notice:"connect toi mec!"
+    #without zip and user_id
+    def light_account_params
+      params.require(:account).permit(:libelle)
     end
-  end
+    
+    #if you are not owner you're out!!
+    def owner(account,id) 
+      if !account.owner(id) && !admin_signed_in?
+        redirect_to root_url, notice: "bad owner!"
+      end
+    end
+    
+    #if you're not logged you're out!!
+    def logged?
+      if !(user_signed_in? || admin_signed_in?)
+        redirect_to new_user_session_url, notice:"connect toi mec!"
+      end
+    end
 end

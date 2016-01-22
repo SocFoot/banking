@@ -1,19 +1,24 @@
 class LitigesController < ApplicationController
-  include Admin, Authentification
-  skip_before_action :admin_only
-  before_action :admin_only, except:[:edit, :update]
-  before_action :admin?, only:[:edit, :update]
-  before_action :set_litige, only: [:show, :edit, :update, :destroy]
+  include Ad, Authentification
+  
+  attr_accessor :NUMBER_LIST
+  attr_accessor :ALPHABET_LIST
 
+  skip_before_action :admin_only, except:[:destroy]
+  before_action :logged?
+  before_action :set_litige, only: [:show, :edit, :update, :destroy]
+  before_action only:[:show, :edit, :update] do
+    owner(@litige, @current_user.id) if  user_signed_in?
+  end
+  
   # GET /litiges
   # GET /litiges.json
   def index
-    if admin?
+    if admin_signed_in?
       @litiges = Litige.all
     else
       @litiges = Litige.tri(@current_user).all
     end
-    
   end
 
   # GET /litiges/1
@@ -37,25 +42,31 @@ class LitigesController < ApplicationController
   # POST /litiges
   # POST /litiges.json
   def create
-    @litige = Litige.new(litige_params)
-
+    @status = [["Nouveau"], ["en cours de traitement"], ["traité"]]
+    @litige_params = user_litige_params
+    if admin_signed_in?
+      @litige_params = litige_params
+    end
+    @litige_params = {identifiant: idenfifiant_generator( 2, 3)}.merge(@litige_params)
+    @litige = Litige.new(@litige_params)
     respond_to do |format|
       if @litige.save
         format.html { redirect_to @litige, notice: 'Litige was successfully created.' }
         format.json { render :show, status: :created, location: @litige }
       else
-        format.html { render :new }
+        format.html { render :new, locals:{status: @status} }
         format.json { render json: @litige.errors, status: :unprocessable_entity }
       end
     end
+    
   end
 
   # PATCH/PUT /litiges/1
   # PATCH/PUT /litiges/1.json
   def update
-    @litige_params = litige_params
-    if !@admin
-      @litige_params = litige_params_user
+    @litige_params = user_litige_params
+    if !admin_signed_in?
+      @litige_params = litige_params
     end
     respond_to do |format|
       if @litige.update(@litige_params)
@@ -89,8 +100,40 @@ class LitigesController < ApplicationController
       params.require(:litige).permit(:identifiant, :status, :motif, :transaction_id)
     end
     
+    def user_litige_params
+      params.require(:litige).permit(:motif)
+    end
+    
     # Never trust parameters from the scary internet, only allow the white list through.
     def conseille_params_user
       params.require(:litige).permit(:transaction_id)
+    end
+    
+    #if you are not owner you're out!!
+    def owner(litige,id) 
+      if !litige.owner(id) && !admin_signed_in?
+        redirect_to root_url, notice: "bad owner!"
+      end
+    end
+    
+    #if you're not logged you're out!!
+    def logged?
+      if !(user_signed_in? || admin_signed_in?)
+        redirect_to new_user_session_url, notice:"connect toi mec!"
+      end
+    end
+    
+    def upcase_random_letters(length)
+      length = length - 1
+      ALPHABET_LIST.shuffle[0..length].join("").upcase
+    end
+    
+    def random_numbers(size)
+      size = size - 1
+      NUMBER_LIST.shuffle[0..size].join("")
+    end
+    
+    def idenfifiant_generator(letters,number)
+      upcase_random_letters(letters) +  random_numbers(number)
     end
 end

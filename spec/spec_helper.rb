@@ -16,7 +16,16 @@
 # users commonly want.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
+require 'factory_girl'
+require_relative '../spec/factories/users.rb'
+require_relative '../spec/factories/accounts.rb'
+require_relative '../spec/factories/epargnes.rb'
+require_relative '../spec/factories/transactions.rb'
+require_relative '../spec/factories/admins.rb'
+require_relative '../spec/factories/litiges.rb'
+require_relative '../spec/factories/conseilles.rb'
 RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.
@@ -39,7 +48,7 @@ RSpec.configure do |config|
     # `true` in RSpec 4.
     mocks.verify_partial_doubles = true
   end
-
+  
 # The settings below are suggested to provide a good initial experience
 # with RSpec, but feel free to customize to your heart's content.
 =begin

@@ -1,15 +1,18 @@
 class TransactionsController < ApplicationController
-  include Admin, Authentification
-  before_action :logged?, only: [:index]
+  include Ad, Authentification
+  skip_before_action :admin_only, only:[:index, :show]
+  before_action :logged?
   before_action :set_transaction, only: [:show, :edit, :update, :destroy]
-
+  before_action only:[:show, :edit, :update] do 
+    owner(@transaction, @current_user.id) if !admin_signed_in?
+  end
   # GET /transactions
   # GET /transactions.json
   def index
-    if admin?
+    if admin_signed_in?
       @transactions = Transaction.all
     else
-      @transaction = Transaction.tri(@current_user.id).all
+      @transactions = Transaction.tri(@current_user.id).all
     end
     respond_to do |format|
       format.html
@@ -36,12 +39,8 @@ class TransactionsController < ApplicationController
   # POST /transactions
   # POST /transactions.json
   def create
-    @account = Account.find_by(zip_params)
-    
     respond_to do |format|
-
       @transaction = Transaction.new(transaction_params)
-      @transaction.account_id = @account.id
       if @transaction.save
         format.html { redirect_to @transaction, notice: 'Transaction was successfully created.' }
         format.json { render :show, status: :created, location: @transaction }
@@ -88,14 +87,17 @@ class TransactionsController < ApplicationController
       params.require(:transaction).permit(:in, :out, :libelle)
     end
     
-    # NSA IS BAD FOR YOUR PARAMETERS
-    def zip_params
-      params.require(:transaction).permit(:zip)
+    #if you are not owner you're out!!
+    def owner(transaction,id) 
+      if !transaction.owner(id) && !admin_signed_in?
+        redirect_to root_url, notice: "bad owner!"
+      end
     end
     
-      def logged?
-    if session[:user_id].nil?
-      redirect_to root_url, notice:"connect toi mec!"
+    #if you're not logged you're out!!
+    def logged?
+      if !(user_signed_in? || admin_signed_in?)
+        redirect_to new_user_session_url, notice:"connect toi mec!"
+      end
     end
-  end
 end

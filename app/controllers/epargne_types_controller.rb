@@ -1,5 +1,5 @@
 class EpargneTypesController < ApplicationController
-  include Admin
+
   before_action :set_epargne_type, only: [:show, :edit, :update, :destroy]
 
   # GET /epargne_types

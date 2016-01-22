@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  devise_for :admins
+  devise_for :users, controllers: {
+        sessions: 'users/sessions', registrations: 'users/registrations', confiramtions: 'users/confirmations'
+  }
   resources :conseilles
   resources :conseilles
   resources :epargne_types
@@ -8,18 +12,20 @@ Rails.application.routes.draw do
   resources :transactions
   resources :accounts
   get 'admin/show'
-
+  default_url_options :host => 'localhost' 
   resources :users
   
   controller :session do
     post 'login' => :create
     delete 'logout' => :destroy
   end
+  
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-   root 'users#index'
+   root 'users#hello'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

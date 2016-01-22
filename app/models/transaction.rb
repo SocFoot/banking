@@ -4,10 +4,18 @@ class Transaction < ActiveRecord::Base
   
   belongs_to :account
   has_many :litiges
+  has_many :conseilles
   
   validate :non_zero
   
   scope :tri, -> (user_id){joins(account: :user).order("zip").where('users.id' => user_id)}
+  
+  def owner(user_id)
+    if self == nil
+      return false
+    end
+    account.user.id == user_id 
+  end
   
   def non_zero
     if (self.in == 0 || self.in.nil?) && (self.out == 0 || self.out.nil?)

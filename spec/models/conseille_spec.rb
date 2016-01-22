@@ -15,7 +15,8 @@ RSpec.describe Conseille, type: :model do
     it "create should pass" do
       Conseille.create!(
         :nom => "MyString",
-        :prenom => "2"""
+        :prenom => "pppp",
+        :user_id => 5
       )
     end
   end

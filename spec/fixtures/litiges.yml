@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  identifiant: EA156
+  status: "dsfsdf"
+  motif: "m motif"
+  transaction_id: 1
+  
+two:
+  id: 2
+  identifiant: AZ159
+  status: "dsfsdf"
+  motif: "m motif"
+  transaction_id: 2

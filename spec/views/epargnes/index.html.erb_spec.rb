@@ -2,25 +2,9 @@ require 'rails_helper'
 
 RSpec.describe "epargnes/index", type: :view do
   before(:each) do
-    @user = User.create!(
-          :nom => "foo",
-          :prenom => "Prenom",
-          :sexe => "Sexe",
-          :adresse => "Adresse",
-          :password_digest => "Password Digest"      
-        )
-    assign(:epargnes, [
-      Epargne.create!(
-        :libelle => "Libelle",
-        :rate => "9.99",
-        :user_id => @user.id
-      ),
-      Epargne.create!(
-        :libelle => "Libelle",
-        :rate => "9.99",
-        :user_id => @user.id
-      )
-    ])
+    @user = create(:user)
+    @user.epargnes.build({rate:"9.99".to_s, libelle:"Libelle"}).save
+    @epargnes = @user.epargnes
   end
 
   it "renders a list of epargnes" do

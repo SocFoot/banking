@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  libelle: foo
+  rate: 8.1
+  user_id: 1
+  
+two:
+  id: 2
+  libelle: bar
+  rate: 8.1
+  user_id: 2
+
+three:
+  id: 3
+  libelle: bar
+  rate: 8.1
+  user_id: 1

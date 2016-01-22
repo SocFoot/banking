@@ -1,0 +1,22 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  id: 1
+  libelle: "foo"
+  in: 0
+  out: 6
+  account_id: 1
+
+two:
+  id: 2
+  libelle: "bar"
+  in: 5
+  out: 0
+  account_id: 2
+
+three:
+  id: 3
+  libelle: "bar"
+  in: 5
+  out: 0
+  account_id: 3

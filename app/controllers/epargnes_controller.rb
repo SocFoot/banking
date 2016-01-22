@@ -1,14 +1,15 @@
 class EpargnesController < ApplicationController
-  include Authentification, Admin
-  skip_before_action :admin_only
-  before_action :admin_only, only: [:destroy]
-  before_action :logged?, only: [:index, :create]
+  include Authentification, Ad
+  skip_before_action :admin_only, except: [:destroy]
+  before_action :logged?, only: [:index, :create, :new, :edit, :update, :show]
   before_action :set_epargne, only: [:show, :edit, :update, :destroy]
-
+  before_action only:[:show, :edit, :update] do 
+    owner(@epargne, @current_user.id)if !admin_signed_in?
+  end
   # GET /epargnes
   # GET /epargnes.json
   def index
-    if admin?
+    if admin_signed_in?
     @epargnes = Epargne.all
     else
     @epargnes = Epargne.tri(@current_user.id).all
@@ -28,7 +29,7 @@ class EpargnesController < ApplicationController
   def new
     @epargne = Epargne.new
     @epargne_types_collect = [[]]
-    @user_collect = 
+    @user_collect = [[]]
     respond_to do |format|
         format.html
         format.js 
@@ -36,7 +37,7 @@ class EpargnesController < ApplicationController
   end
 
   # GET /epargnes/1/edit
-  def edit
+  def edit   
     @epargne_types_collect = EpargneType.where(epargne_id:@epargne.id).collect { |p| [ p.nom ] }
   end
 
@@ -44,7 +45,7 @@ class EpargnesController < ApplicationController
   # POST /epargnes.json
   def create
     @epargne = Epargne.new(epargne_params)
-    @epargne.user_id = @current_user.id
+    @epargne.user_id = @current_user.id  if !admin_signed_in?
     respond_to do |format|
       if @epargne.save
         format.html { redirect_to @epargne, notice: 'Epargne was successfully created.' }
@@ -59,8 +60,12 @@ class EpargnesController < ApplicationController
   # PATCH/PUT /epargnes/1
   # PATCH/PUT /epargnes/1.json
   def update
+    @epargne_params = light_epargne_params
+    if admin_signed_in?
+      @epargne_params = epargne_params
+    end
     respond_to do |format|
-      if @epargne.update(epargne_params)
+      if @epargne.update(@epargne_params)
         format.html { redirect_to @epargne, notice: 'Epargne was successfully updated.' }
         format.json { render :show, status: :ok, location: @epargne }
       else
@@ -88,12 +93,26 @@ class EpargnesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def epargne_params
-      params.require(:epargne).permit(:style, :libelle, :rate, :receive, epargne_types_attributes: [:nom])
+      params.require(:epargne).permit(:libelle, :rate, :receive, :user_id, epargne_types_attributes: [:nom])
     end
     
-      def logged?
-    if session[:user_id].nil?
-      redirect_to root_url, notice:"connect toi mec!"
+        
+    #without zip and user_id
+    def light_epargne_params
+      params.require(:epargne).permit(:libelle, :rate, epargne_types_attributes: [:nom])
     end
-  end
+    
+    #if you are not owner you're out!!
+    def owner(epargne,id) 
+      if !epargne.owner(id) && !admin_signed_in?
+        redirect_to root_url, notice: "bad owner!"
+      end
+    end
+    
+    #if you're not logged you're out!!
+    def logged?
+      if !(user_signed_in? || admin_signed_in?)
+        redirect_to new_user_session_url, notice:"connect toi mec!"
+      end
+    end
 end

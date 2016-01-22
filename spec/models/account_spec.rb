@@ -15,7 +15,7 @@ RSpec.describe Account, type: :model do
   describe "good account" do
   it "create should pass" do
        Account.create!(
-          :zip => "1111111111111111",
+          :zip => "1111411111111111",
           :libelle => "e"    
         )
     end
@@ -24,11 +24,11 @@ RSpec.describe Account, type: :model do
   describe "bad account" do
       it "second create should not pass" do
         Account.create!(
-          :zip => "1111111111111111",
+          :zip => "1111111611111111",
           :libelle => "e"    
         )
         @second = Account.new(
-          :zip => "1111111111111111",
+          :zip => "1113111111111111",
           :libelle => "e"    
         )
         @second.invalid?

@@ -18,155 +18,282 @@ require 'rails_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
+
+
 RSpec.describe EpargnesController, type: :controller do
-  
-  before(:each) do
-    @user = User.create!(
-        :nom => "foo",
-        :prenom => "Prenom",
-        :sexe => "Sexe",
-        :adresse => "Adresse",
-        :password_digest => "Password Digest"      
-    )
-    session[:user_id] = @user.id
-  end
 
   # This should return the minimal set of attributes required to create a valid
   # Epargne. As you add validations to Epargne, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    {libelle: "blah", rate: 9.8, receive: true, user_id:1}
+    {libelle: "blah", rate: 9.8.to_s, receive: true, user_id: @id}
   }
 
   let(:invalid_attributes) {
-    {libelle: "badd",  rate: nil, user_id:1}
+    {libelle: "badd",  rate: nil, user_id:nil}
   }
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
   # EpargnesController. Be sure to keep this updated too.
-  let(:valid_session) { { remember_token: "YXjPrFfsK8SFQOQDEa90ow" } }
+  let(:valid_session) { {user_id: @user.id} }
+    
+  let(:valid_admin_session) {
+    {user_id:User.first.id}
+  }
+  
+  let(:invalid_session) { {user_id: nil} }
+  
+  let(:invalid_owner_session) {{user_id: User.third.id}}
 
   describe "GET #index" do
-    it "assigns all epargnes as @epargnes" do
-      epargne = Epargne.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:epargnes)).to eq(Epargne.tri(@user.id))
+    context "i'm admin", :admin do
+      it "assigns all epargnes as @epargnes" do
+        epargne = Epargne.create! valid_attributes
+        get :index, {}
+        expect(assigns(:epargnes)).to eq(Epargne.all)
+        expect(response.status).to eq(200)
+      end
+    end
+    
+    context "i'm logged", :owner do
+      it "assigns all epargnes as @epargnes" do
+        epargne = Epargne.create! valid_attributes
+        get :index, {}
+        expect(assigns(:epargnes)).to eq(Epargne.tri(@user.id))
+        expect(response.status).to eq(200)
+      end
     end
   end
 
   describe "GET #show" do
-    it "assigns the requested epargne as @epargne" do
-      epargne = Epargne.create! valid_attributes
-      get :show, {:id => epargne.to_param}, valid_session
-      expect(assigns(:epargne)).to eq(epargne)
+    context "i'm admin", :admin do
+      it "assigns the requested epargne as @epargne" do
+        epargne = Epargne.create! valid_attributes
+        get :show, {:id => epargne.to_param}
+        expect(assigns(:epargne)).to eq(epargne)
+        expect(response.status).to eq(200)
+      end
+    end
+    
+    context "i'm owner", :owner do
+      it "assigns the requested epargne as @epargne" do
+        epargne = Epargne.create! valid_attributes
+        get :show, {:id => epargne.to_param}
+        expect(assigns(:epargne)).to eq(epargne)
+        expect(response.status).to eq(200)
+      end
+    end
+    
+    context "i'm not owner", :not_owner do
+      it "assigns the requested epargne as @epargne" do
+        epargne = Epargne.create! valid_attributes
+        get :show, {:id => epargne.to_param}
+        expect(response).to redirect_to root_url
+      end
     end
   end
 
   describe "GET #new" do
-    it "assigns a new epargne as @epargne" do
-      get :new, {}, valid_session
-      expect(assigns(:epargne)).to be_a_new(Epargne)
+    context "i'm logged", :owner do
+      it "assigns a new epargne as @epargne" do
+        get :new, {}
+        expect(assigns(:epargne)).to be_a_new(Epargne)
+        expect(response.status).to eq(200)
+      end
+    end
+    
+    context "i'm not logged" do
+      it "assigns a new epargne as @epargne" do
+        get :new, {}
+        expect(response).to redirect_to new_user_session_url
+      end
     end
   end
 
   describe "GET #edit" do
-    it "assigns the requested epargne as @epargne" do
-      epargne = Epargne.create! valid_attributes
-      get :edit, {:id => epargne.to_param}, valid_session
-      expect(assigns(:epargne)).to eq(epargne)
+    context "i'm admin", :admin do
+      it "assigns the requested epargne as @epargne" do
+        epargne = Epargne.create! valid_attributes
+        get :edit, {:id => epargne.to_param}
+        expect(assigns(:epargne)).to eq(epargne)
+      end
+    end
+    
+    context "i'm owner", :owner do
+      it "assigns the requested epargne as @epargne" do
+        epargne = Epargne.create! valid_attributes
+        get :edit, {:id => epargne.to_param}
+        expect(assigns(:epargne)).to eq(epargne)
+      end
+    end
+    
+    context "i'm not allowed", :not_owner do
+      it "assigns the requested epargne as @epargne" do
+        epargne = Epargne.create! valid_attributes
+        get :edit, {:id => epargne.to_param}
+        expect(response).to redirect_to root_url
+      end
+    end
+    
+    context "i'm not logged", :not_logged do
+      it "assigns the requested epargne as @epargne" do
+        epargne = Epargne.create! valid_attributes
+        get :edit, {:id => epargne.to_param}
+        expect(response).to redirect_to new_user_session_url
+      end
     end
   end
 
   describe "POST #create" do
-    context "with valid params" do
-      it "creates a new Epargne" do
-        expect {
-          post :create, {:epargne => valid_attributes}, valid_session
-        }.to change(Epargne, :count).by(1)
-      end
+    context "i'm admin", :admin do
 
-      it "assigns a newly created epargne as @epargne" do
-        post :create, {:epargne => valid_attributes}, valid_session
-        expect(assigns(:epargne)).to be_a(Epargne)
-        expect(assigns(:epargne)).to be_persisted
-      end
 
-      it "redirects to the created epargne" do
-        post :create, {:epargne => valid_attributes}, valid_session
-        expect(response).to redirect_to(Epargne.last)
+
+    end
+    
+    context "i'm logged", :owner do
+      context "with valid params" do
+        it "creates a new Epargne" do
+          expect {
+            post :create, {:epargne => valid_attributes}
+          }.to change(Epargne, :count).by(1)
+        end
+  
+        it "assigns a newly created epargne as @epargne" do
+          post :create, {:epargne => valid_attributes}
+          expect(assigns(:epargne)).to be_a(Epargne)
+          expect(assigns(:epargne)).to be_persisted
+        end
+  
+        it "redirects to the created epargne" do
+          post :create, {:epargne => valid_attributes}
+          expect(response).to redirect_to(Epargne.last)
+        end
+      end
+  
+      context "with invalid params" do
+        it "assigns a newly created but unsaved epargne as @epargne" do
+          post :create, {:epargne => invalid_attributes}
+          expect(assigns(:epargne)).to be_a_new(Epargne)
+        end
+  
+        it "re-renders the 'new' template" do
+          post :create, {:epargne => invalid_attributes}
+          expect(response).to render_template("new")
+        end
       end
     end
-
-    context "with invalid params" do
-      it "assigns a newly created but unsaved epargne as @epargne" do
-        post :create, {:epargne => invalid_attributes}, valid_session
-        expect(assigns(:epargne)).to be_a_new(Epargne)
+    
+    context "i'm not logged" do
+      it "doesn't post anything" do
+        expect {
+          post :create, {:epargne => valid_attributes}
+        }.to change(Epargne, :count).by(0)       
       end
-
-      it "re-renders the 'new' template" do
-        post :create, {:epargne => invalid_attributes}, valid_session
-        expect(response).to render_template("new")
+      
+      it "redirect to root" do
+        post :create, {:epargne => valid_attributes}
+        expect(response).to redirect_to new_user_session_url
       end
     end
   end
 
   describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        {libelle: "blahhh", rate: 9.8, receive: true, user_id:1}
-      }
-
-      it "updates the requested epargne" do
-        epargne = Epargne.create! valid_attributes
-        put :update, {:id => epargne.to_param, :epargne => new_attributes}, valid_session
-        epargne.reload
-
-      end
-
-      it "assigns the requested epargne as @epargne" do
-        epargne = Epargne.create! valid_attributes
-        put :update, {:id => epargne.to_param, :epargne => valid_attributes}, valid_session
-        expect(assigns(:epargne)).to eq(epargne)
-      end
-
-      it "redirects to the epargne" do
-        epargne = Epargne.create! valid_attributes
-        put :update, {:id => epargne.to_param, :epargne => valid_attributes}, valid_session
-        expect(response).to redirect_to(epargne)
+    context "i'm admin", :admin do
+      context " with valid params" do
+        it "change all params" do
+          epargne = Epargne.create! valid_attributes
+          put :update, {:id => epargne.to_param, :epargne => valid_attributes}
+          expect(assigns(:epargne_params)).to include(valid_attributes)
+        end
       end
     end
-
-    context "with invalid params" do
-      it "assigns the epargne as @epargne" do
-        epargne = Epargne.create! valid_attributes
-        put :update, {:id => epargne.to_param, :epargne => invalid_attributes}, valid_session
-        expect(assigns(:epargne)).to eq(epargne)
+    
+    context "i'm logged", :owner do
+      context "with valid params" do
+        let(:new_attributes) {
+          {libelle: "blahhh", rate: 9.8, receive: true, user_id:1}
+        }
+  
+        it "updates the requested epargne" do
+          epargne = Epargne.create! valid_attributes
+          put :update, {:id => epargne.to_param, :epargne => new_attributes}
+          epargne.reload
+  
+        end
+  
+        it "assigns the requested epargne as @epargne" do
+          epargne = Epargne.create! valid_attributes
+          put :update, {:id => epargne.to_param, :epargne => valid_attributes}
+          expect(assigns(:epargne)).to eq(epargne)
+        end
+  
+        it "redirects to the epargne" do
+          epargne = Epargne.create! valid_attributes
+          put :update, {:id => epargne.to_param, :epargne => valid_attributes}
+          expect(response).to redirect_to(epargne)
+        end
       end
-
+  
+      context "with invalid params" do
+        it "assigns the epargne as @epargne" do
+          epargne = Epargne.create! valid_attributes
+          put :update, {:id => epargne.to_param, :epargne => invalid_attributes}
+          expect(assigns(:epargne)).to eq(epargne)
+        end
+  
+        it "re-renders the 'edit' template" do
+          epargne = Epargne.create! valid_attributes
+          put :update, {:id => epargne.to_param, :epargne => invalid_attributes}
+          expect(response).to render_template("edit")
+        end
+      end
+    end
+    
+    context "i'm not logged" do
+      let(:new_attributes) {
+        {zip:"1111111111111111", libelle:"ll", user_id:"1"}
+      }
       it "re-renders the 'edit' template" do
         epargne = Epargne.create! valid_attributes
-        put :update, {:id => epargne.to_param, :epargne => invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
+        put :update, {:id => epargne.to_param, :epargne => invalid_attributes}
+        expect(response).to redirect_to new_user_session_url
       end
     end
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested epargne" do
-      valid_session = {user_id: User.first.id} 
-      epargne = Epargne.create! valid_attributes
-      expect {
-        delete :destroy, {:id => epargne.to_param}, valid_session
-      }.to change(Epargne, :count).by(-1)
+    context "i'm admin", :admin do
+      it "destroys the requested epargne" do
+        valid_session = {user_id: User.first.id} 
+        epargne = Epargne.create! valid_attributes
+        expect {
+          delete :destroy, {:id => epargne.to_param}
+        }.to change(Epargne, :count).by(-1)
+      end
+    
+      it "redirects to the epargnes list" do
+        valid_session = {user_id: User.first.id}
+        epargne = Epargne.create! valid_attributes
+        delete :destroy, {:id => epargne.to_param}
+        expect(response).to redirect_to(epargnes_url)
+      end
     end
-
-    it "redirects to the epargnes list" do
-      valid_session = {user_id: User.first.id}
-      epargne = Epargne.create! valid_attributes
-      delete :destroy, {:id => epargne.to_param}, valid_session
-      expect(response).to redirect_to(epargnes_url)
+    
+    context  "i'm not admin", :owner do
+      it "destroys nothing account" do
+        epargne = Epargne.create! valid_attributes
+        expect {
+          delete :destroy, {:id => epargne.to_param}
+        }.to change(Epargne, :count).by(0)
+      end
+  
+      it "redirects to the accounts list" do
+        epargne = Epargne.create! valid_attributes
+        delete :destroy, {:id => epargne.to_param}
+        expect(response).to redirect_to root_url
+      end
     end
   end
-
 end

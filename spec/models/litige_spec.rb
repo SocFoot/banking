@@ -87,7 +87,7 @@ RSpec.describe Litige, type: :model do
   describe "test du litige" do
     it "nouveau ins change nada" do
       @account = Account.create!(
-        :zip => "1111111111111111",
+        :zip => "1911111111111111",
         :libelle => "e"    
       )
       @transaction = Transaction.create!(
@@ -107,7 +107,7 @@ RSpec.describe Litige, type: :model do
     
     it "traité ins change nada" do
       @account = Account.create!(
-        :zip => "1111111111111111",
+        :zip => "1111111111111171",
         :libelle => "e"    
       )
       @transaction = Transaction.create!(

@@ -33,6 +33,12 @@ end
 # Use ActiveModel has_secure_password
 gem 'bcrypt', '~> 3.1.7'
 
+# best authnetication gem ever!
+gem 'devise', '~> 3.5', '>= 3.5.2'
+
+#create spec for nothin
+gem 'factory_girl'
+
 gem 'angularjs-rails', '~> 1.4', '>= 1.4.8'
 # Use Unicorn as the app server
 # gem 'unicorn'
