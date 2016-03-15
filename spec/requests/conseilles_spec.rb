@@ -3,17 +3,17 @@ require 'rails_helper'
 RSpec.describe "Conseilles", type: :request do
 
   let(:valid_attributes){
-    {conseille:{nom: "toto", prenom: "nil", user_id: 1, account_id: nil, transaction_id: nil, litige_id: nil}}
+    {conseille:{nom: "toto", prenom: "nil"}}
   }
   
   let(:new_attributes){
-    { nom:"titi" }
+    { nom:"titi", prenom:"gros" }
   }
 
   RSpec.shared_context "conseille_owner_request", :conseille_owner_request do
     before(:each) do
       @user = create(:user)
-      @conseille = @user.conseilles[0]
+      @conseille = @user.conseille
       get new_user_session_url
       expect(response.status).to eq(200)
       post  user_session_path, 'user' => {'email' => @user.email, 'password' => @user.password}
@@ -77,7 +77,7 @@ RSpec.describe "Conseilles", type: :request do
     
     it "get show @conseille" do
       get conseille_path(@conseille)
-      expect(response.status).to redirect_to root_url
+      expect(response).to redirect_to root_url
     end
     
     it "get new @conseille" do
@@ -87,7 +87,7 @@ RSpec.describe "Conseilles", type: :request do
 
     it "get edit @conseille" do
       get edit_conseille_path(@conseille)
-      expect(assigns(:conseille)).to eq(@conseille)
+      expect(response).to redirect_to root_url
     end
   end
 
@@ -129,7 +129,7 @@ RSpec.describe "Conseilles", type: :request do
     
     it "get edit @conseille" do
       get edit_conseille_path(@conseille)
-      expect(response.status).to  eq(200)
+      expect(response).to  redirect_to root_url
     end
   end
   
@@ -152,7 +152,7 @@ RSpec.describe "Conseilles", type: :request do
     it "get edit @conseille" do
       @conseille = Conseille.last
       get edit_conseille_path(@conseille)
-      expect(response).to redirect_to new_user_session_url
+      expect(response).to redirect_to root_url
     end
   end
 end

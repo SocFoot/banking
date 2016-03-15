@@ -1,0 +1,63 @@
+<script>
+	angular.module("bank")
+		.controller("accountController", function ($scope) {
+
+		}
+	})
+	.factory("account", function () {
+	 
+		var accountData = [];
+	 
+		return {
+			addProduct: function (libelle) {
+				accountData.push({
+					libelle: libelle
+				});
+			},
+			 
+			removeProduct: function (id) {
+					accountData.splice(id, 1);
+				}
+			},
+			 
+			getProducts: function () {
+				return accountData;
+			}
+		}
+	});
+</script>
+	<%= form_for(@account) do |f| %>
+	  <% if @account.errors.any? %>
+	    <div id="error_explanation">
+	      <h2><%= pluralize(@account.errors.count, "error") %> prohibited this account from being saved:</h2>
+	
+	      <ul>
+	      <% @account.errors.full_messages.each do |message| %>
+	        <li><%= message %></li>
+	      <% end %>
+	      </ul>
+	    </div>
+	  <% end %>
+	
+	  <div class="field">
+	    <%= f.label :zip %><br>
+	    <%= f.number_field :zip, class:"form-control" %>
+	  </div>
+	  <div class="field">
+	    <%= f.label :libelle %><br>
+	    <%= f.text_field :libelle, class:"form-control" %>
+	  </div>
+	    <% if @admin %>
+		    <div class="field">
+		    <%= f.label :user_id %><br>
+		    <%= f.select :user_id, @user_ids, class:"form-control" %>
+		  </div>
+	  <% end %>
+	  <div class="field">
+	    <%= f.label :conseille_id %><br>
+	    <%= f.collection_select :conseille_id, Conseille.all, :id, :nom_prenom,{}, {class:'btn btn-secondary dropdown-toggle',  data:{toggle:"dropdown"}  } %>
+	  </div>
+	  <div class="actions">
+	    <%= f.submit "new", class:"btn btn-secondary" %>
+	  </div>
+	<% end %>

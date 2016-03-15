@@ -11,20 +11,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160120132235) do
+ActiveRecord::Schema.define(version: 20160213145954) do
 
   create_table "accounts", force: :cascade do |t|
-    t.integer  "zip",        limit: 16
+    t.integer  "zip",          limit: 16
     t.string   "libelle"
-    t.datetime "created_at",            null: false
-    t.datetime "updated_at",            null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.integer  "user_id"
     t.string   "admin"
     t.string   "references"
     t.integer  "admin_id"
+    t.integer  "conseille_id"
+    t.integer  "fake_id"
   end
 
   add_index "accounts", ["admin_id"], name: "index_accounts_on_admin_id"
+  add_index "accounts", ["conseille_id"], name: "index_accounts_on_conseille_id"
+  add_index "accounts", ["fake_id"], name: "index_accounts_on_fake_id"
   add_index "accounts", ["user_id"], name: "index_accounts_on_user_id"
 
   create_table "admins", force: :cascade do |t|
@@ -50,18 +54,10 @@ ActiveRecord::Schema.define(version: 20160120132235) do
   create_table "conseilles", force: :cascade do |t|
     t.string   "nom"
     t.string   "prenom"
-    t.integer  "user_id"
-    t.integer  "account_id"
-    t.integer  "transaction_id"
-    t.integer  "litige_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "litige"
   end
-
-  add_index "conseilles", ["account_id"], name: "index_conseilles_on_account_id"
-  add_index "conseilles", ["litige_id"], name: "index_conseilles_on_litige_id"
-  add_index "conseilles", ["transaction_id"], name: "index_conseilles_on_transaction_id"
-  add_index "conseilles", ["user_id"], name: "index_conseilles_on_user_id"
 
   create_table "epargne_types", force: :cascade do |t|
     t.string   "nom"
@@ -74,13 +70,15 @@ ActiveRecord::Schema.define(version: 20160120132235) do
 
   create_table "epargnes", force: :cascade do |t|
     t.string   "libelle"
-    t.decimal  "rate",       precision: 4, scale: 2
+    t.decimal  "rate",         precision: 4, scale: 2
     t.integer  "user_id"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                           null: false
+    t.datetime "updated_at",                           null: false
     t.boolean  "receive"
+    t.integer  "conseille_id"
   end
 
+  add_index "epargnes", ["conseille_id"], name: "index_epargnes_on_conseille_id"
   add_index "epargnes", ["user_id"], name: "index_epargnes_on_user_id"
 
   create_table "litiges", force: :cascade do |t|
@@ -90,8 +88,10 @@ ActiveRecord::Schema.define(version: 20160120132235) do
     t.integer  "transaction_id"
     t.datetime "created_at",     null: false
     t.datetime "updated_at",     null: false
+    t.integer  "conseille_id"
   end
 
+  add_index "litiges", ["conseille_id"], name: "index_litiges_on_conseille_id"
   add_index "litiges", ["transaction_id"], name: "index_litiges_on_transaction_id"
 
   create_table "transactions", force: :cascade do |t|
@@ -99,11 +99,13 @@ ActiveRecord::Schema.define(version: 20160120132235) do
     t.integer  "out"
     t.string   "libelle"
     t.integer  "account_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "conseille_id"
   end
 
   add_index "transactions", ["account_id"], name: "index_transactions_on_account_id"
+  add_index "transactions", ["conseille_id"], name: "index_transactions_on_conseille_id"
 
   create_table "users", force: :cascade do |t|
     t.string   "nom"
@@ -130,8 +132,10 @@ ActiveRecord::Schema.define(version: 20160120132235) do
     t.integer  "failed_attempts",        default: 0,  null: false
     t.string   "unlock_token"
     t.datetime "locked_at"
+    t.integer  "conseille_id"
   end
 
+  add_index "users", ["conseille_id"], name: "index_users_on_conseille_id"
   add_index "users", ["email"], name: "index_users_on_email", unique: true
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
 

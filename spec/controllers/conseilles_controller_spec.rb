@@ -25,11 +25,11 @@ RSpec.describe ConseillesController, type: :controller do
   # Conseille. As you add validations to Conseille, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    {nom: "toto", prenom: "tata", user_id: @id, account_id: nil, transaction_id: nil, litige_id: nil}
+    {nom: "toto", prenom: "tata"}
   }
 
   let(:invalid_attributes) {
-    {user_id:nil}
+    {nom:""}
   }
 
   # This should return the minimal set of values that should be in the session
@@ -97,11 +97,11 @@ RSpec.describe ConseillesController, type: :controller do
       end
     end
     
-    context "i'm owner", :owner do
+    context "i'm not admin", :owner do
       it "assigns the requested conseille as @conseille" do
         conseille = Conseille.create! valid_attributes
         get :edit, {:id => conseille.to_param}
-        expect(assigns(:conseille)).to eq(conseille)
+        expect(response).to redirect_to root_url
       end
     end
   end
@@ -194,29 +194,22 @@ RSpec.describe ConseillesController, type: :controller do
         end
       end
     end
-    context "i'm owner", :owner do
+    context "i'm not admin", :owner do
       context "with valid params" do
         let(:new_attributes) {
-          {nom: "toto", prenom: "tata"}
+          {nom: "toto", prenom: ""}
         }
-  
-        it "updates the requested conseille" do
-          conseille = Conseille.create! valid_attributes
-          put :update, {:id => conseille.to_param, :conseille => new_attributes}
-          conseille.reload
-  
-        end
-  
+        
         it "assigns the requested conseille as @conseille" do
           conseille = Conseille.create! valid_attributes
           put :update, {:id => conseille.to_param, :conseille => valid_attributes}
-          expect(assigns(:conseille)).to eq(conseille)
+          expect(assigns(:conseille)).to eq(nil)
         end
   
-        it "redirects to the conseille" do
+        it "redirects to root_url" do
           conseille = Conseille.create! valid_attributes
           put :update, {:id => conseille.to_param, :conseille => valid_attributes}
-          expect(response).to redirect_to(conseille)
+          expect(response).to redirect_to root_url
         end
       end
   
@@ -224,13 +217,13 @@ RSpec.describe ConseillesController, type: :controller do
         it "assigns the conseille as @conseille" do
           conseille = Conseille.create! valid_attributes
           put :update, {:id => conseille.to_param, :conseille => invalid_attributes}
-          expect(assigns(:conseille)).to eq(conseille)
+          expect(assigns(:conseille)).to redirect_to root_url
         end
   
         it "re-renders the 'edit' template" do
           conseille = Conseille.create! valid_attributes
           put :update, {:id => conseille.to_param, :conseille => invalid_attributes}
-          expect(response).to render_template("edit")
+          expect(response).to redirect_to root_url
         end
       end
     end

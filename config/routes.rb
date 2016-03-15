@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :transactions
   resources :accounts
   get 'admin/show'
+  get 'app', to: 'application#angular'
   default_url_options :host => 'localhost' 
   resources :users
   

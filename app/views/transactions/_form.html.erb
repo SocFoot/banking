@@ -30,6 +30,10 @@
 		    <%= f.select :account_id, @account_ids %>
 	  </div>
   <% end %>
+  <div class="field">
+    <%= f.label :conseille_id %><br>
+    <%= f.collection_select :conseille_id, Conseille.all, :id, :nom_prenom  %>
+  </div>
   <div class="actions">
     <%= f.submit %>
   </div>

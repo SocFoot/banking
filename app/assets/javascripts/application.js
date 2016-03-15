@@ -13,8 +13,11 @@
 //= require jquery
 //= require jquery_ujs
 //= require angular
+//= require angular-route
 //= require tether
 //= require bootstrap-sprockets
-//= require turbolinks
+//= require angular-ui-router
+//= require angular-resource
+//= require angular-rails-templates
+//= require ng-app/ng-app
 //= require_tree .
-

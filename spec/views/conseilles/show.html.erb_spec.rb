@@ -4,11 +4,7 @@ RSpec.describe "conseilles/show", type: :view do
   before(:each) do
     @conseille = assign(:conseille, Conseille.create!(
       :nom => "Nom",
-      :prenom => "Prenom",
-      :user_id => 1,
-      :account_id => nil,
-      :trans => nil,
-      :litige_id => nil
+      :prenom => "Prenom"
     ))
   end
 
@@ -16,9 +12,5 @@ RSpec.describe "conseilles/show", type: :view do
     render
     expect(rendered).to match(/Nom/)
     expect(rendered).to match(/Prenom/)
-    expect(rendered).to match(//)
-    expect(rendered).to match(//)
-    expect(rendered).to match(//)
-    expect(rendered).to match(//)
   end
 end

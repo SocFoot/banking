@@ -1,26 +1,50 @@
-<h2>Log in</h2>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
 
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
+<script>
+	angular.module("bank")
+		.controller("userSessionController", function ($scope, $http) {
+			$scope.data.user = {};
+			$scope.sign_in = function (sign_in_data) {
+			user_data = {user:$scope.data.user
+  			};
 
-  <% if devise_mapping.rememberable? -%>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
-    </div>
-  <% end -%>
+			$http.post("/users/sign_in", user_data)
+			.success(function (user_data) {
+				$scope.data.user.email = "user_data.password";
+			})
+			.error(function (error) {
+				$scope.data.user.email = user_data;
+			}).finally(function () {
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
+			});
+		}
+	})
+</script>
+<div class="col-xs-4 card card card-block well" ng-controller="userSessionController">
+	<h2>Log in</h2>
+	<form class="new_user" id="new_user" ><input name="utf8" type="hidden" value="&#x2713;" />
 
-<%= render "devise/shared/links" %>
+	  <div class="field">
+	    <label for="user_email">Email</label><br />
+	    <input class="form-control" placeholder="Enter email" autofocus="autofocus" type="email" value="" name="user[email]" id="user_email" ng-model="data.user.email" />
+	  </div>
+	  <div class="field">
+	    <label for="user_password">Password</label><br />
+	    <input class="form-control" placeholder="Enter Password" autocomplete="off" type="password" name="user[password]" id="user_password" ng-model="data.user.password"  />
+	  </div>
+	
+	    <div class="field">
+	      <input type="checkbox" value="1" name="user[remember_me]" id="user_remember_me" ng-model="data.user.remember_me" />
+	      <label for="user_remember_me">Remember me</label>
+	    </div>
+	
+	  <div class="actions">
+	    <button name="commit" value="Log in" class="btn btn-secondary pull-xs-right" 
+	    	ng-click="sign_in(data.user)"/>Sign in
+	    	</button>
+	  </div>
+	</form>
+	
+	<%= render "devise/shared/links" %>
+	</div>
+</div>

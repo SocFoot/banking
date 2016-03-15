@@ -131,8 +131,7 @@ RSpec.describe UsersController, type: :controller do
         user = User.create! valid_attributes
         valid_session = {user_id:user.to_param}
         get :edit, {:id => user.to_param}
-        expect(assigns(:user)).to eq(user)
-        expect(assigns(:user)).to redirect_to new_user_session_url
+        expect(response).to redirect_to new_user_session_url
       end
     end
   end

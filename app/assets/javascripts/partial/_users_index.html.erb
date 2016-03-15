@@ -1,0 +1,25 @@
+<div class="btn-group-sm">
+
+	
+	<div class="btn btn-primary" ng-click="myusers()">
+		json index
+	</div>
+</div>
+
+<br>
+
+<table class="table table-striped" ng-show="data.users_empty">
+	<thead>
+		<tr>
+		<th>Description</th>
+		<th>Done</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="user in data.users">
+			<td>{{user.nom}}</td>
+			<td>{{user.prenom}}</td>
+			<td>{{user.adresse}}</td>
+		</tr>
+	</tbody>
+</table>

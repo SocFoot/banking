@@ -3,10 +3,10 @@ class Epargne < ActiveRecord::Base
 
   validates :rate, presence: true
   
+  belongs_to :conseille
   belongs_to :user
   belongs_to :admin
   has_many :epargne_types
-  has_many :conseilles
   
   accepts_nested_attributes_for :epargne_types
   

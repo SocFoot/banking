@@ -2,9 +2,9 @@ class Transaction < ActiveRecord::Base
   
   attr_accessor :zip
   
+  belongs_to :conseille
   belongs_to :account
   has_many :litiges
-  has_many :conseilles
   
   validate :non_zero
   

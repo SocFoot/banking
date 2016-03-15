@@ -16,7 +16,6 @@ RSpec.describe Conseille, type: :model do
       Conseille.create!(
         :nom => "MyString",
         :prenom => "pppp",
-        :user_id => 5
       )
     end
   end

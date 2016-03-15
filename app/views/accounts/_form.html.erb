@@ -1,31 +1,63 @@
-<%= form_for(@account) do |f| %>
-  <% if @account.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@account.errors.count, "error") %> prohibited this account from being saved:</h2>
+<script>
+	angular.module("bank")
+	.factory("account", function () {
+	 
+		var accountData = [];
+	 
+		return {
+			addAccount: function (libelle) {
+				accountData.push({
+					libelle: libelle
+				});
 
-      <ul>
-      <% @account.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+			},
+			 
+			removeAccount: function (id) {
+				accountData.splice(id, 1);
+			},
+			getAccount: function () {
+				return accountData;
+			}
+		}
+	})
+	.controller("accountController",['$scope', 'account', '$http', function ($scope, account, $http) {
+			$scope.data.account = {};
+			$scope.data.accounts = account;
+			$scope.addAccountToAccounts = function (prod) {		
+				account_data = {account:$scope.data.account};
 
-  <div class="field">
-    <%= f.label :zip %><br>
-    <%= f.number_field :zip %>
-  </div>
-  <div class="field">
-    <%= f.label :libelle %><br>
-    <%= f.text_field :libelle %>
-  </div>
-    <% if @admin %>
-	    <div class="field">
-	    <%= f.label :user_id %><br>
-	    <%= f.select :user_id, @user_ids %>
+				$http.post("/accounts", account_data)
+				.success(function (account) {
+					account.addAccount(prod.libelle);
+					$scope.data.accounts = account.getAccount();		
+				})
+				.error(function (error) {
+					$scope.data.account.zip = "000000000";
+				}).finally(function () {
+	
+				});
+			}
+	}]);
+</script>
+	<form class="new_account" id="new_account" accept-charset="UTF-8"
+		ng-controller="userController">
+	  <div class="field">
+	    <label for="account_zip">Zip</label><br>
+	    <input class="form-control" type="number" name="account[zip]" id="account_zip" />
 	  </div>
-  <% end %>
-  <div class="actions">
-    <%= f.submit %>
-  </div>
-<% end %>
+	  <div class="field">
+	    <label for="account_libelle">Libelle</label><br>
+	    <input class="form-control" type="text" name="account[libelle]" ng-model="data.account.libelle" id="account_libelle" />
+	  </div>
+	  <div class="field">
+	    <label for="account_conseille_id">Conseille</label><br>
+	    <select class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" name="account[conseille_id]" id="account_conseille_id">
+	    	<option value="1">foo bar</option>
+		<option value="2">Bernard Tapie</option>
+		</select>
+	  </div>
+	  <div class="actions">
+	    <input type="submit" name="commit" value="new" class="btn btn-secondary" 
+	  		ng-click="postaccount(data.account)"/>
+	  </div>
+</form>

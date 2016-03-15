@@ -5,19 +5,11 @@ RSpec.describe "conseilles/index", type: :view do
     assign(:conseilles, [
       Conseille.create!(
         :nom => "Nom",
-        :prenom => "Prenom",
-        :user_id => 4,
-        :account_id => 3,
-        :transaction_id => 2,
-        :litige_id => 1
+        :prenom => "Prenom"
       ),
       Conseille.create!(
         :nom => "Nom",
-        :prenom => "Prenom",
-        :user_id => 4,
-        :account_id => 3,
-        :transaction_id => 2,
-        :litige_id => 1
+        :prenom => "Prenom"
       )
     ])
   end

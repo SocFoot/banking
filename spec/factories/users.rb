@@ -8,7 +8,6 @@ FactoryGirl.define do
     end
     sexe "h"
     adresse "7 rue"
-    
     sequence :email do |n|
       "#{n}@gmail.com"
     end
@@ -16,8 +15,10 @@ FactoryGirl.define do
     password_confirmation "password"
     confirmed_at Date.today
     after(:create) do |user|
-      create(:account, user: user)
-      create(:conseille, user: user)
+      account = create(:account, user: user)
+      transaction = create(:transaction, account: account)
+      create(:litige, trans: transaction)
+      create(:conseille, users: [user])
       create(:epargne, user: user)
     end
   end

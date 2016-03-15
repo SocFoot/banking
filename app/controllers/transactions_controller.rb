@@ -1,11 +1,6 @@
 class TransactionsController < ApplicationController
   include Ad, Authentification
-  skip_before_action :admin_only, only:[:index, :show]
-  before_action :logged?
-  before_action :set_transaction, only: [:show, :edit, :update, :destroy]
-  before_action only:[:show, :edit, :update] do 
-    owner(@transaction, @current_user.id) if !admin_signed_in?
-  end
+
   # GET /transactions
   # GET /transactions.json
   def index

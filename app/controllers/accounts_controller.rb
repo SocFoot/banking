@@ -1,8 +1,6 @@
 class AccountsController < ApplicationController
   include Authentification, Ad
-  skip_before_action :admin_only, except: [:destroy]
-  before_action :set_current_user, only: [:index, :create, :edit, :update, :new]
-  before_action :logged?, only: [:index, :create, :edit, :update, :show, :new]
+
   before_action :set_account, only: [:show, :edit, :update, :destroy]
   before_action only:[:update] do 
     owner(@account, @current_user.id)if !admin_signed_in?
@@ -10,15 +8,16 @@ class AccountsController < ApplicationController
   # GET /accounts
   # GET /accounts.json
   def index
+    index = json_account_params[:json_id].to_i if !index 
     if admin_signed_in?
       @accounts = Account.all
     else
-      @accounts = Account.tri(@current_user.id).all
+      @accounts = Account.tri(@current_user.id).all[(index)..(index + 5)]
     end
-
+    index = index + 1
     respond_to do |format|
       format.html
-      format.json { render json: @accounts}
+      format.json { render json: @accounts, locals: {last: "@last"} }
     end
   end
 
@@ -46,6 +45,7 @@ class AccountsController < ApplicationController
   # POST /accounts.json
   def create
     @account = Account.new(account_params)
+    @account.zip = Account.random_zip
     @account.user_id = @current_user.id if @current_user
     respond_to do |format|
       if @account.save
@@ -61,7 +61,6 @@ class AccountsController < ApplicationController
   # PATCH/PUT /accounts/1
   # PATCH/PUT /accounts/1.json
   def update      
-    
     @account_params = light_account_params
     if admin_signed_in?
       @account_params = account_params
@@ -95,8 +94,11 @@ class AccountsController < ApplicationController
 
     #(ADMIN ONLY) Never trust parameters from the scary internet, only allow the white list through.
     def account_params
-      params.require(:account).permit(:zip, :libelle, :user_id)
-
+      params.require(:account).permit(:libelle, :user_id, :conseille_id)
+    end
+    #(ADMIN ONLY) Never trust parameters from the scary internet, only allow the white list through.
+    def json_account_params
+      params.permit(:json_id, :data_id)
     end
     
     #without zip and user_id

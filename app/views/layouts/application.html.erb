@@ -6,71 +6,7 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
 </head>
-<script>
-var bank = angular.module('bank',[]);
 
-bank.controller("userController", function($http, $scope) {
-  $scope.data = {};
-  $scope.data.users = [];
-  $scope.data.users_empty = false;
-  $scope.data.transactions = [];
-  $scope.data.transactions_empty = false;
-  $scope.data.conseilles = [];
-  $scope.data.conseilles_empty = false;
-  $scope.data.epargnes = [];
-  $scope.data.epargnes_empty = false;
-  $scope.data.accounts = [];
-  $scope.data.accounts_empty = false;
-  
-  
-  $scope.value = "some value";
-	$scope.myusers = function(){	
-		$http.get("http://localhost:3000/users.json")
-	    .success(function(el) {	
-        	$scope.data.users = $scope.data.users.concat(el); 
-        	$scope.data.users_empty = true;
-        }).error(function(error) {
-			$scope.data.error = "error";
-		});  
-	}
-	$scope.mytransactions = function(){	
-		$http.get("http://localhost:3000/transactions.json")
-	    .success(function(el) {	
-        	$scope.data.transactions = $scope.data.transactions.concat(el); 
-        	$scope.data.transactions_empty = true;
-        }).error(function(error) {
-			$scope.data.error = "error";
-		});  
-	}
-		$scope.myconseilles = function(){	
-		$http.get("http://localhost:3000/conseilles.json")
-	    .success(function(el) {	
-        	$scope.data.conseilles = $scope.data.conseilles.concat(el); 
-        	$scope.data.conseilles_empty = true;
-        }).error(function(error) {
-			$scope.data.error = "error";
-		});  
-	}
-		$scope.myepargnes = function(){	
-		$http.get("http://localhost:3000/epargnes.json")
-	    .success(function(el) {	
-        	$scope.data.epargnes = $scope.data.epargnes.concat(el); 
-        	$scope.data.epargnes_empty = true;
-        }).error(function(error) {
-			$scope.data.error = "error";
-		});  
-	}
-		$scope.myaccounts = function(){	
-		$http.get("http://localhost:3000/accounts.json")
-	    .success(function(el) {	
-        	$scope.data.accounts = $scope.data.accounts.concat(el); 
-        	$scope.data.accounts_empty = true;
-        }).error(function(error) {
-			$scope.data.error = "error";
-		});  
-	}
-});
-</script>
 <body ng-app="bank">
 	
 	<nav class="navbar navbar-fixed-top  navbar-light bg-faded" role="navigation">	
@@ -88,9 +24,11 @@ bank.controller("userController", function($http, $scope) {
 	</nav>
 	
 	<div class="container"  ng-controller="userController">
-
-
-		<%= yield %>
+		<% if @app %>
+			<ui-view></ui-view>
+		<% else %>
+			<%= yield %>
+		<% end %>
 	</div>
 </body>
 </html>

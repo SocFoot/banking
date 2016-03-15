@@ -5,7 +5,7 @@ class Litige < ActiveRecord::Base
   validate :good_identifiant
   
   belongs_to :trans , foreign_key: "transaction_id", class_name: "Transaction"
-  has_many :conseilles
+  belongs_to :conseille
   
   scope :tri, -> (user_id){joins(trans: {account: :user}).order("zip").where('users.id' => user_id)}
   
@@ -21,4 +21,22 @@ class Litige < ActiveRecord::Base
       errors.add( :in,  "bad identifant")
     end
   end
+  
+  def self.idenfifiant_generator(letters,number)
+    self.upcase_random_letters(letters) +  self.random_numbers(number)
+  end
+  
+  private
+  
+  def self.upcase_random_letters(length)
+    length = length - 1
+    ALPHABET_LIST.shuffle[0..length].join("").upcase
+  end
+  
+  def self.random_numbers(size)
+    size = size - 1
+    NUMBER_LIST.shuffle[0..size].join("")
+  end
+  
+  
 end

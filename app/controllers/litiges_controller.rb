@@ -4,12 +4,9 @@ class LitigesController < ApplicationController
   attr_accessor :NUMBER_LIST
   attr_accessor :ALPHABET_LIST
 
-  skip_before_action :admin_only, except:[:destroy]
-  before_action :logged?
-  before_action :set_litige, only: [:show, :edit, :update, :destroy]
-  before_action only:[:show, :edit, :update] do
-    owner(@litige, @current_user.id) if  user_signed_in?
-  end
+
+  
+
   
   # GET /litiges
   # GET /litiges.json
@@ -47,7 +44,7 @@ class LitigesController < ApplicationController
     if admin_signed_in?
       @litige_params = litige_params
     end
-    @litige_params = {identifiant: idenfifiant_generator( 2, 3)}.merge(@litige_params)
+    @litige_params = {identifiant: Litige.idenfifiant_generator( 2, 3)}.merge(@litige_params)
     @litige = Litige.new(@litige_params)
     respond_to do |format|
       if @litige.save
@@ -123,17 +120,5 @@ class LitigesController < ApplicationController
       end
     end
     
-    def upcase_random_letters(length)
-      length = length - 1
-      ALPHABET_LIST.shuffle[0..length].join("").upcase
-    end
-    
-    def random_numbers(size)
-      size = size - 1
-      NUMBER_LIST.shuffle[0..size].join("")
-    end
-    
-    def idenfifiant_generator(letters,number)
-      upcase_random_letters(letters) +  random_numbers(number)
-    end
+
 end

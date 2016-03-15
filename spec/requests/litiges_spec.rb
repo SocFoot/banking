@@ -4,7 +4,7 @@ RSpec.describe "Litiges", type: :request do
 
   
   let(:valid_attributes){
-    {litige:{identifiant: "ER956", status: "traité", motif: "lol", transaction_id:nil}}
+    {litige:{identifiant: Litige.idenfifiant_generator(2,3), status: "traité", motif: "lol", transaction_id:nil}}
   }
   
   let(:new_attributes){

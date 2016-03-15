@@ -17,7 +17,7 @@ RSpec.shared_context "admin def", :admin do
     
     @admin = create(:admin)     
     @transaction = create(:transaction)
-    @conseille = create(:conseille) 
+    @conseille = @transaction.conseille
     @epargne = create(:epargne)
     @account = @transaction.account
     @account_id = @account.id

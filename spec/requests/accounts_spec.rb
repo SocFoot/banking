@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "Accounts", type: :request do
   
   let(:valid_attributes){
-    {account:{libelle:"libelle", zip:4111111111111112, user_id: 1 }}
+    {account:{libelle:"libelle", zip:Account.random_zip, user_id: 1 }}
     }
   
   let(:new_attributes){

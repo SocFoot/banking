@@ -1,32 +1,32 @@
 class Conseille < ActiveRecord::Base
   validates :nom, presence:true
   validates :prenom, presence:true
-  validate :all_nil?
-  belongs_to :admin
-  belongs_to :user
-  belongs_to :account
-  belongs_to :trans , foreign_key: "transaction_id", class_name: "Transaction"
-  belongs_to :litige
+  validate do 
+    empty_attributes(:nom, :prenom)
+  end
+  has_many :admins
+  has_many :users
+  has_many :accounts
+  has_many :epargnes
+  has_many :transactions , foreign_key: "transaction_id", class_name: "Transaction"
+  has_many :litiges
   
-  def all_nil?
-    if (!self.user_id && !self.account_id && !self.transaction_id && !self.litige_id)
-      errors.add( :in,  "can't ALL blank")
+  def empty_attributes(*attributes)
+    if check_empty?(attributes[0])
+      errors.add( :in,  "empty")
     end
   end
   
-  def owner(user_id)
-    if litige
-      @lit = litige.owner(user_id)
+  private
+    def check_empty?(*attributes)
+      val = true
+      attributes.each do |attri| 
+        val = val && send(attri).empty? if send(attri)
+      end
+      val
     end
-    if trans
-      @tra = trans.owner(user_id)
-    end
-    if account
-      @acc = account.owner(user_id)
-    end
-    if user
-      user.id == user_id
-    end
+  
+  def nom_prenom
+    "#{nom} #{prenom}"
   end
-  @lit || @tra ||  @acc || @us
 end

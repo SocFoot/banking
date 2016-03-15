@@ -1,7 +1,6 @@
 class EpargnesController < ApplicationController
   include Authentification, Ad
-  skip_before_action :admin_only, except: [:destroy]
-  before_action :logged?, only: [:index, :create, :new, :edit, :update, :show]
+
   before_action :set_epargne, only: [:show, :edit, :update, :destroy]
   before_action only:[:show, :edit, :update] do 
     owner(@epargne, @current_user.id)if !admin_signed_in?

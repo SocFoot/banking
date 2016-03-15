@@ -9,8 +9,5 @@ FactoryGirl.define do
     trait :trans do
       transaction
     end
-    after(:create) do |transaction|
-      create(:litige, trans: transaction)
-    end
   end 
 end

@@ -1,35 +1,20 @@
-<%= form_for(@user) do |f| %>
-  <% if @user.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+<form class="new_user" id="new_user" action="/users/sign_in" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="qN3NhGgV7259RXSsWNrJCOPVFacl/YBMgS8IzzvhIEj2t++Rf9IjU3Twcup7xOBMs7DCXTVEtCCn7GybQopb+A==" />
+  <div class="field">
+    <label for="user_email">Email</label><br />
+    <input class="form-control" placeholder="Enter email" autofocus="autofocus" type="email" value="" name="user[email]" id="user_email" />
+  </div>
 
-      <ul>
-      <% @user.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <div class="field">
+    <label for="user_password">Password</label><br />
+    <input class="form-control" placeholder="Enter Password" autocomplete="off" type="password" name="user[password]" id="user_password" />
+  </div>
+
+    <div class="field">
+      <input name="user[remember_me]" type="hidden" value="0" /><input type="checkbox" value="1" name="user[remember_me]" id="user_remember_me" />
+      <label class="form-control" for="user_remember_me">Remember me</label>
     </div>
-  <% end %>
 
-  <div class="field">
-    <%= f.label :nom %><br>
-    <%= f.text_field :nom %>
-  </div>
-  <div class="field">
-    <%= f.label :prenom %><br>
-    <%= f.text_field :prenom %>
-  </div>
-  <div class="field">
-    <%= f.label :sexe %><br>
-    <%= f.text_field :sexe %>
-  </div>
-  <div class="field">
-    <%= f.label :adresse %><br>
-    <%= f.text_field :adresse %>
-  </div>
-  Password: <%= f.password_field :password %>
-  Password Confirmation: <%= f.password_field :password_confirmation %>
   <div class="actions">
-    <%= f.submit %>
+    <input type="submit" name="commit" value="Log in" class="btn btn-secondary pull-xs-right" />
   </div>
-<% end %>
+</form>

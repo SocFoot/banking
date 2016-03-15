@@ -1,0 +1,23 @@
+<form class="new_user" id="new_user" action="/users/sign_in" accept-charset="UTF-8" method="post"><input name="utf8" type="hidden" value="&#x2713;" /><input type="hidden" name="authenticity_token" value="qN3NhGgV7259RXSsWNrJCOPVFacl/YBMgS8IzzvhIEj2t++Rf9IjU3Twcup7xOBMs7DCXTVEtCCn7GybQopb+A==" />
+  <div class="field">
+    <label for="user_email">Email</label><br />
+    <input class="form-control" placeholder="Enter email" autofocus="autofocus" type="email" value="" name="user[email]" id="user_email" />
+  </div>
+
+  <div class="field">
+    <label for="user_password">Password</label><br />
+    <input class="form-control" placeholder="Enter Password" autocomplete="off" type="password" name="user[password]" id="user_password" />
+  </div>
+
+    <div class="field">
+      <label class="form-control" for="user_remember_me">Remember me</label>
+      <input name="user[remember_me]" type="hidden" value="0" /><input type="checkbox" value="1" name="user[remember_me]" id="user_remember_me" />
+    </div>
+    <div class="field">
+    	<label class="form-control">Conseille</label>
+		<select select-api="conseille"/>
+	</div>
+  <div class="actions">
+    <input type="submit" name="commit" value="Log in" class="btn btn-secondary pull-xs-right" />
+  </div>
+</form>

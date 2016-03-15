@@ -1,10 +1,8 @@
 class UsersController < ApplicationController
   include Authentification, Ad
   
-  before_action :admin_only, only: [:destroy]
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  before_action :logged?, except: [:new, :create, :hello]
-
+  
   # GET /users
   # GET /users.json
   def index
@@ -33,6 +31,7 @@ class UsersController < ApplicationController
     @accounts.each.with_index do |account, i|
       instance_variable_set("@last_transactions_"+"#{i}",account.transactions.last(3))
     end
+    
   end
 
   # GET /users/new

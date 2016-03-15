@@ -1,8 +1,8 @@
 class ConseillesController < ApplicationController
   include Authentification, Ad
-  skip_before_action :admin_only, except:[:new, :create, :show]
+
   before_action :set_conseille, only:[:show, :edit, :update, :destroy]
-  before_action :logged?
+
 
   # GET /conseilles
   # GET /conseilles.json
@@ -59,9 +59,6 @@ class ConseillesController < ApplicationController
   # PATCH/PUT /conseilles/1.json
   def update
     @conseille_params = conseille_params
-    if !admin_signed_in?
-      @conseille_params = conseille_params_user
-    end
     respond_to do |format|
       if @conseille.update(@conseille_params)
         format.html { redirect_to @conseille, notice: 'Conseille was successfully updated.' }
@@ -93,14 +90,7 @@ class ConseillesController < ApplicationController
     def conseille_params
       params.require(:conseille).permit(:nom, :prenom, :user_id, :account_id, :transaction_id, :litige_id)
     end
-
-    
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def conseille_params_user
-      params.require(:conseille).permit(:account_id, :epargne_id, :user_id)
-    end
-    
-    
+     
     #if you're not logged you're out!!
     def logged?
       if !(user_signed_in? || admin_signed_in?)

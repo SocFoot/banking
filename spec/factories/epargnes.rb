@@ -3,5 +3,6 @@ FactoryGirl.define do
     rate "9.99"
     libelle "Libelle"
     user
+
   end 
 end

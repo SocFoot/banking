@@ -4,10 +4,8 @@ one:
   id: 1
   nom: "EA156"
   prenom: "dsfsdf"
-  user_id: 1
   
 two:
   id: 2
   nom: "AZ159"
   prenom: "dsfsdf"
-  user_id: 2
